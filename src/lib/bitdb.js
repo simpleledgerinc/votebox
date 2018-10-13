@@ -1,3 +1,6 @@
+import { Buffer } from 'buffer';
+import Ballot from './Ballot';
+
 const endpoint = 'https://bitdb.network/q/';
 
 class BitDB {
@@ -23,26 +26,24 @@ class BitDB {
         return json;
     }
 
-    async ballotInfo(fileId){
-        const file = await this.readBitcoinFile(fileId);
-        const json = JSON.parse(
-            file.match(/.{1,2}/g)
-                .map(i => parseInt(i, 16))
-                .map(i => String.fromCharCode(i))
-                .join('')
-        );
+    async getBallotInfo(fileId){
+        const file = await this.readBitcoinFile(fileId)
+            , buf  = Buffer.from(file, 'hex');
 
-        return json;
+        return Ballot.fromBuffer(buf);
     }
 
-    async listBallots(offset = 0, limit = 20) {
+    async getBallotList(offset = 0, limit = 20) {
         const response = await this._query({
             v: 2,
+            e: {
+                'out.b10': 'hex'
+            },
             q: {
                 find: {
                     'out.s1': 'SLP\x00',
                     'out.s3': 'GENESIS',
-                    'out.s4': 'votebox'
+                    'out.s4': 'votebox.io'
                 },
                 limit
             }

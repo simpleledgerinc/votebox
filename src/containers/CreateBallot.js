@@ -1,93 +1,86 @@
 import React, { Component } from 'react';
 import {
-  Form,
-  Button,
-  Checkbox,
-  List
+    Step,
+    Icon,
+    Segment
 } from 'semantic-ui-react';
+
 import BadgerMessage from './BadgerMessage';
-import CreateBallotModal from './CreateBallotModal';
+import CreateBallotForm from './CreateBallotForm';
+import PayWidget from './PayWidget';
+import UploadWidget from './UploadWidget';
+
+const STEP_FORM   = 0
+    , STEP_PAY    = 1
+    , STEP_UPLOAD = 2;
 
 export default class CreateBallot extends Component {
-  state = {
-    title: '',
-    choices: [
-      'This is the first choice',
-      'This is the second choice'
-    ],
-    open: false
-  };
+    state = {
+        step: STEP_FORM,
+        ballot: null
+    };
 
-  handleChange = (e, { name, value }) => {
-    if (name.indexOf('choice-') === 0) {
-      const i = parseInt(name.substr(7))
-        , choices = this.state.choices.map(str => String(str)); // clone
-
-      choices[i] = value;
-      if (value.length === 0) {
-        for (let i = choices.length - 1; i >= 0; i--) {
-          if (choices[i].length === 0){
-            choices.pop();
-          } else {
-            break;
-          }
-        }
-      }
-
-      this.setState({ choices });
-    } else if(name === 'title'){
-      this.setState({ title: value });
-    }
-  };
-
-  renderList() {
-    const items = [];
-
-    for (let i = 0; i < this.state.choices.length; i++) {
-      items.push(
-        <List.Item key={i}>
-          <Form.Field>
-            <Form.Input name={'choice-' + i} value={this.state.choices[i]} onChange={this.handleChange} />
-          </Form.Field>
-        </List.Item>
-      );
-    }
-    items.push(
-      <List.Item key={items.length}>
-        <Form.Field>
-          <Form.Input name={'choice-' + items.length} placeholder="The next choice goes here..." onChange={this.handleChange} />
-        </Form.Field>
-      </List.Item>
+    renderStepForm = () => (
+        <CreateBallotForm
+            onSubmit={this.handleFormSubmitted} />
     );
 
-    return (
-      <List bulleted>
-        {items}
-      </List>
-    );
-  }
+    handleFormSubmitted = ballot => {
+        console.log(ballot);
+        this.setState({
+            step: STEP_PAY,
+            ballot
+        });
+    };
 
-  render() {
-    return (
-      <div>
-        <BadgerMessage />
-        <Form>
-          <Form.Field>
-            <label>Title</label>
-            <Form.Input name='title' placeholder='Title' value={this.state.title} onChange={this.handleChange} />
-          </Form.Field>
-          <Form.Field>
-            <label>Choices</label>
-            {this.renderList()}
-          </Form.Field>
-          <Button type='submit' onClick={() => this.setState({ open: true })}>Create ballot</Button>
-        </Form>
-        <CreateBallotModal
-          open={this.state.open}
-          title={this.state.title}
-          choices={this.state.choices}
-          onClose={() => this.setState({ open: false })} />
-      </div>
+    renderStepPay = () => (
+        <PayWidget
+            amount={this.state.ballot.estimateCost()}
+            onReceivePayment={this.handlePaymentReceived} />
     );
-  }
+
+    handlePaymentReceived = () => {
+        this.setState({
+            step: STEP_UPLOAD,
+        });
+    };
+
+    renderStepUpload = () => (
+        <UploadWidget
+            ballot={this.state.ballot} />
+    );
+
+    render = () => (
+        <div>
+            <BadgerMessage />
+            <Step.Group attached='top'>
+                <Step active={this.state.step === STEP_FORM}>
+                    <Icon name='configure' />
+                    <Step.Content>
+                        <Step.Title>Configure</Step.Title>
+                    </Step.Content>
+                </Step>
+
+                <Step active={this.state.step === STEP_PAY} disabled={this.state.step < STEP_PAY}>
+                    <Icon name='bitcoin' />
+                    <Step.Content>
+                        <Step.Title>Pay</Step.Title>
+                    </Step.Content>
+                </Step>
+
+                <Step active={this.state.step === STEP_UPLOAD} disabled={this.state.step < STEP_UPLOAD}>
+                    <Icon name='upload' />
+                    <Step.Content>
+                        <Step.Title>Publish</Step.Title>
+                    </Step.Content>
+                </Step>
+            </Step.Group>
+
+            <Segment attached>
+                {this.state.step === STEP_FORM && this.renderStepForm()}
+                {this.state.step === STEP_PAY && this.renderStepPay()}
+                {this.state.step === STEP_UPLOAD && this.renderStepUpload()}
+            </Segment>
+        </div>
+    )
 }

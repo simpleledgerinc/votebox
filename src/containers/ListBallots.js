@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Table, Message, Icon } from 'semantic-ui-react';
 import BallotItem from './BallotItem';
 
-import bitdb from '../lib/bitdb';
+import bitdb from '../lib/BitDB';
 import setState from '../util/asyncSetState';
 
 export default class ListBallots extends Component {
@@ -23,7 +23,7 @@ export default class ListBallots extends Component {
     });
 
     try {
-      const list = await bitdb.listBallots();
+      const list = await bitdb.getBallotList();
       await setState(this, {
         fetching: false,
         list
@@ -40,7 +40,7 @@ export default class ListBallots extends Component {
     if(this.state.fetching){
       return (
         <Table.Row>
-          <Table.Cell colSpan={2}>
+          <Table.Cell colSpan={4}>
             <Message icon>
               <Icon name='circle notched' loading />
               <Message.Content>
@@ -56,7 +56,7 @@ export default class ListBallots extends Component {
     if(this.state.fetchErr){
       return (
         <Table.Row>
-          <Table.Cell colSpan={2}>
+          <Table.Cell colSpan={4}>
             <Message error>
               <Message.Header>There was an error fetching the ballots</Message.Header>
               <p>{String(this.state.fetchErr)}</p>
@@ -66,9 +66,8 @@ export default class ListBallots extends Component {
       );
     }
 
-    return this.state.list.map(i => (
-      <BallotItem
-        file={i.out[0].s6.substr(12)} />
+    return this.state.list.map(tx => (
+      <BallotItem tx={tx} />
     ));
   }
 
@@ -79,6 +78,8 @@ export default class ListBallots extends Component {
           <Table.Row>
             <Table.HeaderCell>Question</Table.HeaderCell>
             <Table.HeaderCell>Answers</Table.HeaderCell>
+            <Table.HeaderCell>End of voting</Table.HeaderCell>
+            <Table.HeaderCell>Number of cards</Table.HeaderCell>
           </Table.Row>
         </Table.Header>
 

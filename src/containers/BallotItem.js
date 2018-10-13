@@ -1,31 +1,79 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import {
     Table,
-    Dimmer,
+    Message,
     Loader
 } from 'semantic-ui-react';
-import bitdb from '../lib/bitdb';
+import bitdb from '../lib/BitDB';
+import setState from '../util/asyncSetState';
 
 export default class BallotItem extends Component {
-    state = {
-        info: null,
+    static propTypes = {
+        tx: PropTypes.any.isRequired,
     };
 
-    async componentDidMount(){
-        try {
-            const info = await bitdb.ballotInfo(this.props.file);
-            this.setState({ info });
-        } catch(err) {
-            console.error(err);
-        }
+    state = {
+        ballot: null,
+        fetching: true,
+        fetchError: null
+    };
+
+    componentDidMount(){
+        this.fetchBallot().catch(console.error);
     }  
 
+    fetchBallot = async () => {
+        await setState(this, {
+            ballot: null,
+            fetching: true,
+            fetchError: null
+        });
+
+        const fileId = this.props.tx.out[0].s6.substr(12);
+
+        try {
+            const ballot = await bitdb.getBallotInfo(fileId);
+
+            await setState(this, {
+                ballot,
+                fetching: false
+            });
+        } catch(err){
+            await setState(this, {
+                fetching: false,
+                fetchError: err
+            });
+        }
+    };
+
     render(){
-        if(this.state.info === null){
+        const ballot     = this.state.ballot
+            , numOfCards = parseInt(this.props.tx.out[0].b10, 16);
+
+        if(this.state.fetchError){
             return (
                 <Table.Row>
-                    <Table.Cell colSpan={2}>
+                    <Table.Cell colSpan={3}>
+                        <Message error>
+                            <Message.Header>Unable to parse this ballot</Message.Header>
+                            {String(this.state.fetchError)}
+                        </Message>
+                    </Table.Cell>
+                    <Table.Cell>
+                        {numOfCards}
+                    </Table.Cell>
+                </Table.Row>
+            );
+        }
+        if(this.state.fetching){
+            return (
+                <Table.Row>
+                    <Table.Cell colSpan={3}>
                         <Loader active inline='centered' />
+                    </Table.Cell>
+                    <Table.Cell>
+                        {numOfCards}
                     </Table.Cell>
                 </Table.Row>
             );
@@ -33,15 +81,17 @@ export default class BallotItem extends Component {
 
         const row = [
             <Table.Row>
-                <Table.Cell rowSpan={this.state.info['vote-choices'].length}>{this.state.info['vote-name']}</Table.Cell>
-                <Table.Cell>{this.state.info['vote-choices'][0].name}</Table.Cell>
+                <Table.Cell rowSpan={ballot.getChoices().length}>{ballot.getTitle()}</Table.Cell>
+                <Table.Cell>{ballot.getChoices()[0]}</Table.Cell>
+                <Table.Cell rowSpan={ballot.getChoices().length}>{ballot.getEnd().toLocaleString()}</Table.Cell>
+                <Table.Cell rowSpan={ballot.getChoices().length}>{numOfCards}</Table.Cell>
             </Table.Row>
         ];
 
-        for(let i = 1; i < this.state.info['vote-choices'].length; i++){
+        for(let i = 1; i < ballot.getChoices().length; i++){
             row.push(
                 <Table.Row>
-                    <Table.Cell>{this.state.info['vote-choices'][i].name}</Table.Cell>
+                    <Table.Cell>{ballot.getChoices()[i]}</Table.Cell>
                 </Table.Row>
             );
         }
