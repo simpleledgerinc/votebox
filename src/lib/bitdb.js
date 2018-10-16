@@ -1,5 +1,6 @@
 import { Buffer } from 'buffer';
 import Ballot from './Ballot';
+import BigNumber from 'bignumber.js';
 
 const endpoint = 'https://bitdb.network/q/';
 
@@ -24,6 +25,36 @@ class BitDB {
 
         const json = await res.json();
         return json;
+    }
+
+    async getBallot(tokenId){
+        const res = await this._query({
+            v: 2,
+            e: {
+                'out.b10': 'hex'
+            },
+            q: {
+                find: {
+                    'tx.h': tokenId
+                }
+            }
+        });
+
+        if(res.unconfirmed.length < 1 && res.confirmed.length < 1){
+            return null;
+        }
+
+        const tx = res.confirmed[0] || res.unconfirmed[0];
+
+        if(!tx){
+            return null;
+        }
+
+        const ballot = await this.getBallotInfo(tx.out[0].s6.substring(12));
+
+        ballot.setQuantity(new BigNumber(tx.out[0].b10, 16));
+        
+        return ballot;
     }
 
     async getBallotInfo(fileId){

@@ -1,8 +1,13 @@
 import BitcoinFile from './BitcoinFile';
 import Token from './Token';
+import { bitbox } from 'slpjs';
+import deriveAddress from '../util/deriveAddress';
+import _ from 'lodash';
 import { Buffer } from 'buffer';
+import BitDB from './BitDB';
 
-const VERSION = 0;
+const VERSION = 0
+    , VALIDITY_AFTER_END = 60 * 60 * 24 * 90; // 3 months
 
 export default class Ballot {
     _token    = new Token();
@@ -49,6 +54,22 @@ export default class Ballot {
 
     getChoices(){
         return this._choices;
+    }
+
+    getAddress(i){
+        if(typeof i !== 'number'){
+            throw new Error('i must be a number');
+        }
+        if(i < 0 || i >= this._choices.length){
+            throw new Error('i must be in range');
+        }
+        if(i % 1 !== 0){
+            throw new Error('i must be an integer');
+        }
+
+        let end = this.getEnd().getTime();
+        end += VALIDITY_AFTER_END;
+        return deriveAddress(i, new Date(end));
     }
 
     setEnd(end){
@@ -204,5 +225,21 @@ export default class Ballot {
         ballot.setChoices(choices);
         ballot.setEnd(new Date(time));
         return ballot;
+    }
+
+    static async getActiveBallots(address){
+        const balances = await bitbox.getAllTokenBalances(address);
+        const tokenIds = Object.keys(balances).filter(val => val.length === 64);
+
+        const ballots = []
+            , chunks  = _.chunk(tokenIds, 5);
+        for(const tokenIds of chunks){
+            const ballotChunk = await Promise.all(tokenIds.map(tokenId => BitDB.getBallot(tokenId)));
+            for(let i = 0; i < tokenIds.length; i++){
+                ballots.push([tokenIds[i], ballotChunk[i], balances[tokenIds[i]]]);
+            }
+        }
+        
+        return ballots;
     }
 }

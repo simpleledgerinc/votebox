@@ -11,8 +11,10 @@ import {
   Menu,
   Segment
 } from 'semantic-ui-react';
+import BadgerMessage from './BadgerMessage';
 import CreateBallot from './CreateBallot';
-import ListBallots from './ListBallots';
+import BallotFinder from './BallotFinder';
+import MyVotes from './MyVotes';
 import MenuItem from './MenuItem';
 
 import './App.css';
@@ -28,6 +30,8 @@ class App extends Component {
               VoteBox.io
               <Header.Subheader>Voting on the Bitcoin Cash blockchain</Header.Subheader>
             </Header>
+
+            <BadgerMessage />
           </div>
 
           <Divider />
@@ -35,8 +39,8 @@ class App extends Component {
             <MenuItem exact to='/'>
               New ballot
             </MenuItem>
-            <MenuItem to='/list'>
-              All ballots
+            <MenuItem to='/ballots'>
+              Find ballot
             </MenuItem>
             <MenuItem to='/votes'>
               My Votes
@@ -45,7 +49,8 @@ class App extends Component {
 
           <Switch>
             <Route exact path='/' component={CreateBallot} />
-            <Route path='/list' component={ListBallots} />
+            <Route path='/ballots' component={BallotFinder} />
+            <Route path='/votes' component={MyVotes} />
           </Switch>
         </Segment>
       </Container>

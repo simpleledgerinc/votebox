@@ -5,7 +5,6 @@ import {
     Segment
 } from 'semantic-ui-react';
 
-import BadgerMessage from './BadgerMessage';
 import CreateBallotForm from './CreateBallotForm';
 import PayWidget from './PayWidget';
 import UploadWidget from './UploadWidget';
@@ -52,7 +51,6 @@ export default class CreateBallot extends Component {
 
     render = () => (
         <div>
-            <BadgerMessage />
             <Step.Group attached='top'>
                 <Step active={this.state.step === STEP_FORM}>
                     <Icon name='configure' />

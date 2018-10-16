@@ -74,6 +74,10 @@ export default class Token {
         this._initialQuantity = quantity;
     }
 
+    getInitialQuantity(quantity){
+        return this._initialQuantity;
+    }
+
     buildOpReturn(withBaton = false){
         return slp.buildGenesisOpReturn({
             ticker: this._ticker,
