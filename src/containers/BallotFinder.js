@@ -172,7 +172,7 @@ class BallotFinderBody extends Component {
         for(let i = 0; i < this.state.balances.length; i++){
             let percent;
             if(sum.isZero()){
-                percent = 1 / 3;
+                percent = 1 / labels.length;
             } else {
                 percent = this.state.balances[i].dividedBy(sum).toNumber();
             }
@@ -186,7 +186,7 @@ class BallotFinderBody extends Component {
                     datasets: [{
                         data, 
                         backgroundColor: [
-                            'red', 'green', 'blue', 'yellow'
+                            '#F59332', '#478559', '#020202', '#4D4D4D', '#854673'
                         ],
                         hoverBackgroundColor: []
                     }]
