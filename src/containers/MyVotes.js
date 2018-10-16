@@ -161,6 +161,14 @@ class MyVotesBody extends Component {
             );
         }
 
+        if(this.state.ballots.length === 0){
+            return (
+                <Message error>
+                    No Vote tokens on this address
+                </Message>
+            );
+        }
+
         return (
             <div className="MyVotes">
                 {this.state.ballots.map(this.renderBallot)}
