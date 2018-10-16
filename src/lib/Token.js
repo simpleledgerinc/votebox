@@ -1,5 +1,5 @@
 import BigNumber from 'bignumber.js';
-import { slp } from 'slpjs';
+import { slp, bitbox } from 'slpjs';
 
 export const minQuantity = new BigNumber('0x0000000000000000', 16);
 export const maxQuantity = new BigNumber('0xffffffffffffffff', 16);
@@ -110,5 +110,13 @@ export default class Token {
                 wif: wif
             }]
         });
+    }
+
+    static async getBalance(tokenId, address){
+        const balances = await bitbox.getAllTokenBalances(address);
+        if(tokenId in balances){
+            return balances[tokenId];
+        }
+        return new BigNumber(0);
     }
 }

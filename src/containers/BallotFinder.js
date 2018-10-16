@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
 import { Icon, Input, Table, Message } from 'semantic-ui-react';
 import BitDB from '../lib/BitDB';
+import BigNumber from 'bignumber.js';
 import setState from '../util/asyncSetState';
 import { Doughnut } from 'react-chartjs-2';
 import {
     Route,
     withRouter
 } from "react-router-dom";
+import Token from '../lib/Token';
 
 class BallotFinder extends Component {
     state = {
@@ -40,18 +42,7 @@ class BallotFinderBody extends Component {
         ballot: null,
         fetching: true,
         fetchError: null,
-        chart: {
-            labels: [
-                'Choice #1', 'Choice #2'
-            ],
-            datasets: [{
-                data: [50, 50],
-                backgroundColor: [
-                    'red', 'green'
-                ],
-                hoverBackgroundColor: []
-            }]
-        }
+        balances: [],
     };
 
     componentDidMount(){
@@ -59,18 +50,34 @@ class BallotFinderBody extends Component {
         this.loadBallot(id).catch(console.error);
     }
 
+    componentWillUpdate(nextProps){
+        if(this.props.match.params.id !== nextProps.match.params.id){
+            this.loadBallot(nextProps.match.params.id).catch(console.error);
+        }
+    }
+
     async loadBallot(id) {
         await setState(this, {
             ballot: null,
             fetching: true,
-            fetchError: null
+            fetchError: null,
+            balances: []
         });
 
         try {
             const ballot = await BitDB.getBallot(id);
+    
+            const balances = [];
+            for(let i = 0; i < ballot.getChoices().length; i++){
+                const addr = ballot.getAddress(i);
+                const balance = await Token.getBalance(id, addr);
+                balances.push(balance);
+            }
+
             await setState(this, {
                 fetching: false,
-                ballot
+                ballot,
+                balances
             });
         } catch(err){
             await setState(this, {
@@ -82,12 +89,17 @@ class BallotFinderBody extends Component {
 
     renderTableChoice = (ballot) => (choice, i, list) => {
         const text = (
-            <Table.Cell key={i}>
+            <Table.Cell>
                 {choice}
             </Table.Cell>
         );
+        const votes = (
+            <Table.Cell>
+                {this.state.balances[i].toString(10)}
+            </Table.Cell>
+        );
         const address = (
-            <Table.Cell key={i}>
+            <Table.Cell>
                 {ballot.getAddress(i)}
             </Table.Cell>
         );
@@ -98,6 +110,7 @@ class BallotFinderBody extends Component {
                     <strong>Choices</strong>
                 </Table.Cell>}
                 {text}
+                {votes}
                 {address}
             </Table.Row>
         );
@@ -127,7 +140,7 @@ class BallotFinderBody extends Component {
                         </Table.Cell>
                     </Table.Row>
                     
-                    {ballot.getChoices().map(this.renderTableChoice)}
+                    {ballot.getChoices().map(this.renderTableChoice(ballot))}
 
                     <Table.Row>
                         <Table.Cell>
@@ -152,9 +165,32 @@ class BallotFinderBody extends Component {
     }
 
     renderChart(){
+        const labels = this.state.ballot.getChoices().map((choice, i) => `Choice #${i + 1}`)
+            , sum    = this.state.balances.reduce((sum, cur) => sum.plus(cur), new BigNumber(0));
+
+        let data = [];
+        for(let i = 0; i < this.state.balances.length; i++){
+            let percent;
+            if(sum.isZero()){
+                percent = 1 / 3;
+            } else {
+                percent = this.state.balances[i].dividedBy(sum).toNumber();
+            }
+            data.push(percent * 100);
+        }
+
         return (
             <Doughnut
-                data={this.state.chart}
+                data={{
+                    labels,
+                    datasets: [{
+                        data, 
+                        backgroundColor: [
+                            'red', 'green', 'blue', 'yellow'
+                        ],
+                        hoverBackgroundColor: []
+                    }]
+                }}
                 width={400}
                 options={{
                     maintainAspectRatio: true

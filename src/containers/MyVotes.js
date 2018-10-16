@@ -48,6 +48,13 @@ class MyVotesBody extends Component {
             .catch(console.error);
     }
 
+    componentWillUpdate(nextProps){
+        if(this.props.match.params.address !== nextProps.match.params.address){
+            this.loadBallots(nextProps.match.params.address)
+                .catch(console.error);
+        }
+    }
+
     async loadBallots(address){
         await setState(this, {
             fetching: true,
@@ -69,12 +76,12 @@ class MyVotesBody extends Component {
 
     renderChoice = (ballot) => (choice, i, list) => {
         const text = (
-            <Table.Cell key={i}>
+            <Table.Cell>
                 {choice}
             </Table.Cell>
         );
         const address = (
-            <Table.Cell key={i}>
+            <Table.Cell>
                 {ballot.getAddress(i)}
             </Table.Cell>
         );

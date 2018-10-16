@@ -78,7 +78,7 @@ export default class PayWidget extends Component {
                         {this.renderQRCode()}
                     </div>
                     <div>
-                        <Button color='green' onClick={this.handleBadger}>Pay with Badger</Button>
+                        {BadgerWallet.hasInstalled() && <Button color='green' onClick={this.handleBadger}>Pay with Badger</Button>}
                         <Button secondary onClick={this.handleWallet}>Pay with wallet software</Button>
                     </div>
                 </div>
