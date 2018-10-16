@@ -6,6 +6,7 @@ import {
 import PropTypes from 'prop-types';
 import QRCode from 'qrcode.react';
 import BITBOX from '../util/bitbox';
+import MoneyButton from '@moneybutton/react-money-button';
 
 import BrowserWallet from '../lib/BrowserWallet';
 import BadgerWallet from '../lib/BadgerWallet';
@@ -66,8 +67,12 @@ export default class PayWidget extends Component {
     }
 
     handleWallet = () => {
-        window.open(BrowserWallet.getAddress() + '?amount=1');
+        window.open(BrowserWallet.getAddress() + '?amount=' + BITBOX.BitcoinCash.toBitcoinCash(this.props.amount));
     }
+
+    handleMBError = (err) => {
+        console.error(err);
+    };
 
     render() {
         return (
@@ -80,6 +85,12 @@ export default class PayWidget extends Component {
                     <div>
                         {BadgerWallet.hasInstalled() && <Button color='green' onClick={this.handleBadger}>Pay with Badger</Button>}
                         <Button secondary onClick={this.handleWallet}>Pay with wallet software</Button>
+                        <MoneyButton
+                            to={BrowserWallet.getAddress()}
+                            amount={BITBOX.BitcoinCash.toBitcoinCash(this.props.amount)}
+                            currency="BCH"
+                            onPayment={this.checkPayment}
+                            onError={this.handleMBError} />
                     </div>
                 </div>
             </div>
