@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Container, Icon, Input, Table, Message } from 'semantic-ui-react';
+import { Container, Icon, Input, Table, Message, Button } from 'semantic-ui-react';
 import Ballot from '../lib/Ballot';
 import setState from '../util/asyncSetState';
 import {
@@ -36,13 +36,9 @@ class MyVotes extends Component {
                 <Input
                     icon={<Icon name='search' inverted circular link onClick={this.handleSearch} />}
                     placeholder='Enter your address'
-                    action={BadgerWallet.hasInstalled() ? {
-                        type:    'button',
-                        content: 'Fill with Badger wallet address',
-                        onClick: this.handleBadgerFill
-                    } : null}
                     value={this.state.address}
                     onChange={this.handleChange} />
+                {BadgerWallet.hasInstalled() && <Button onClick={this.handleBadgerFill}>Fill with Badger wallet address</Button>}
                 <Route path="/votes/:address" component={MyVotesBody} />
             </div>
         );
