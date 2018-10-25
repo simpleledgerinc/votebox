@@ -1,3 +1,5 @@
+import { utils } from 'slpjs';
+
 const badger = window.web4bch && window.web4bch.bch;
 class BadgerWallet {
     static hasInstalled(){
@@ -6,6 +8,14 @@ class BadgerWallet {
 
     static getAddress(){
         return badger.defaultAccount;
+    }
+
+    static getSLPAddress(){
+        const addr = this.getAddress();
+        if(!addr)
+            return addr;
+        
+        return utils.toSlpAddress(addr);
     }
 
     static getBalance(addr){

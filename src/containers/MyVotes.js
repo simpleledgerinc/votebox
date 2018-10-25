@@ -6,6 +6,7 @@ import {
     Route,
     withRouter
 } from "react-router-dom";
+import BadgerWallet from '../lib/BadgerWallet';
 import './MyVotes.css';
 
 class MyVotes extends Component {
@@ -23,10 +24,25 @@ class MyVotes extends Component {
         });
     };
 
+    handleBadgerFill = () => {
+        this.setState({
+            address: BadgerWallet.getSLPAddress()
+        });
+    };
+
     render() {
         return (
             <div>
-                <Input icon={<Icon name='search' inverted circular link onClick={this.handleSearch} />} placeholder='Enter your address' value={this.state.address} onChange={this.handleChange} />
+                <Input
+                    icon={<Icon name='search' inverted circular link onClick={this.handleSearch} />}
+                    placeholder='Enter your address'
+                    action={BadgerWallet.hasInstalled() ? {
+                        type:    'button',
+                        content: 'Fill with Badger wallet address',
+                        onClick: this.handleBadgerFill
+                    } : null}
+                    value={this.state.address}
+                    onChange={this.handleChange} />
                 <Route path="/votes/:address" component={MyVotesBody} />
             </div>
         );

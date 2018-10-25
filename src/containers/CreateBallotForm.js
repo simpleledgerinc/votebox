@@ -88,7 +88,7 @@ export default class CreateBallotForm extends Component {
 
     handleBadgerFill = () => {
         this.setState({
-            receiver: BadgerWallet.getAddress()
+            receiver: BadgerWallet.getSLPAddress()
         });
     };
 
@@ -147,7 +147,7 @@ export default class CreateBallotForm extends Component {
                     <Form.Input required
                         name='receiver'
                         placeholder='Simpleledger address of ballot cards receiver'
-                        action={false /* Sending tokens to Badger is not a good idea as of version 0.0.5 */ ? {
+                        action={BadgerWallet.hasInstalled() ? {
                             type:    'button',
                             content: 'Fill with Badger wallet address',
                             onClick: this.handleBadgerFill
