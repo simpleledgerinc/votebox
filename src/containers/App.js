@@ -7,7 +7,6 @@ import {
   Container,
   Divider,
   Header,
-  Icon,
   Menu,
   Segment
 } from 'semantic-ui-react';
@@ -18,6 +17,7 @@ import MyVotes from './MyVotes';
 import MenuItem from './MenuItem';
 
 import './App.css';
+import logo from '../images/votebox-logo.png';
 
 class App extends Component {
   render() {
@@ -26,8 +26,7 @@ class App extends Component {
         <Segment>
           <div className='app-header'>
             <Header as='h2' icon>
-              <Icon name='bitcoin' />
-              VoteBox.io
+              <img className="logo" src={logo} /> <br />
               <Header.Subheader>Voting on the Bitcoin Cash blockchain</Header.Subheader>
             </Header>
             <BadgerMessage />

@@ -5,3 +5,8 @@
 .App .app-header {
   text-align: center;
 }
+
+.App .logo {
+    width: 250px !important;
+    margin-bottom: 16px;
+}
