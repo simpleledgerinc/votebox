@@ -1,5 +1,6 @@
 import BITBOX from './bitbox';
 import { Buffer } from 'buffer';
+import { toSlpAddress } from 'slpjs/lib/utils';
 
 export const deriveRedeemScript = function(choice, end){
     if(typeof choice !== 'number'){
@@ -38,7 +39,8 @@ export const deriveRedeemScript = function(choice, end){
 export default function(choice, end){
     const redeemScript = deriveRedeemScript(choice, end)
         , scriptHash   = BITBOX.Crypto.hash160(redeemScript)
-        , scriptPubKey = BITBOX.Script.scriptHash.output.encode(scriptHash);
+        , scriptPubKey = BITBOX.Script.scriptHash.output.encode(scriptHash)
+        , cashAddr     = BITBOX.Address.fromOutputScript(scriptPubKey);
 
-    return BITBOX.Address.fromOutputScript(scriptPubKey);
+    return toSlpAddress(cashAddr);
 }

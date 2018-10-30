@@ -140,7 +140,7 @@ export default class CreateBallotForm extends Component {
                     {this.renderList()}
                 </Form.Field>
 
-                    <Form.Group widths='equal'>
+                {/* <Form.Group widths='equal'> */}
 
                 <Form.Field>
                     <label>Ballot cards receiver</label>
@@ -163,7 +163,8 @@ export default class CreateBallotForm extends Component {
                         value={this.state.end}
                         onChange={this.handleChange} />
                 </Form.Field>
-                </Form.Group>
+                
+                {/* </Form.Group> */}
 
                 <Button id='create-submit' type='submit' color='green'>Create</Button>
             </Form>

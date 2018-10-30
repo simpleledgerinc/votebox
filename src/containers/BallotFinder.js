@@ -28,7 +28,7 @@ class BallotFinder extends Component {
     render() {
         return (
             <div>
-                <Input icon={<Icon name='search' inverted circular link onClick={this.handleSearch} />} placeholder='Enter token id' value={this.state.tokenId} onChange={this.handleChange} />
+                <Input style={{width: "470px"}} icon={<Icon name='search' inverted circular link onClick={this.handleSearch} />} placeholder='Enter token id' value={this.state.tokenId} onChange={this.handleChange} />
                 <Route path="/ballots/:id" component={BallotFinderBody} />
             </div>
         );
@@ -90,28 +90,28 @@ class BallotFinderBody extends Component {
     renderTableChoice = (ballot) => (choice, i, list) => {
         const text = (
             <Table.Cell>
-                {choice}
+               {this.state.balances[i].toString(10)} - {choice} ({ballot.getAddress(i)})
             </Table.Cell>
         );
-        const votes = (
-            <Table.Cell>
-                {this.state.balances[i].toString(10)}
-            </Table.Cell>
-        );
-        const address = (
-            <Table.Cell>
-                {ballot.getAddress(i)}
-            </Table.Cell>
-        );
+        // const votes = (
+        //     <Table.Cell>
+        //         {this.state.balances[i].toString(10)}
+        //     </Table.Cell>
+        // );
+        // const address = (
+        //     <Table.Cell>
+        //         {ballot.getAddress(i)}
+        //     </Table.Cell>
+        // );
 
         return (
             <Table.Row key={i}>
                 {i === 0 && <Table.Cell rowSpan={list.length}>
-                    <strong>Choices</strong>
+                    <strong>Results</strong>
                 </Table.Cell>}
                 {text}
-                {votes}
-                {address}
+                {/* {votes} */}
+                {/* {address} */}
             </Table.Row>
         );
     }

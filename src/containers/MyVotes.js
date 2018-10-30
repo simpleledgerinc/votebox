@@ -33,11 +33,11 @@ class MyVotes extends Component {
     render() {
         return (
             <div>
-                <Input
+                <Input style={{width: "470px"}}
                     icon={<Icon name='search' inverted circular link onClick={this.handleSearch} />}
-                    placeholder='Enter your address'
+                    placeholder='Enter simpleledger address holding voting tokens'
                     value={this.state.address}
-                    onChange={this.handleChange} />
+                    onChange={this.handleChange}/>
                 {BadgerWallet.hasInstalled() && <Button onClick={this.handleBadgerFill}>Fill with Badger wallet address</Button>}
                 <Route path="/votes/:address" component={MyVotesBody} />
             </div>
@@ -89,22 +89,22 @@ class MyVotesBody extends Component {
     renderChoice = (ballot) => (choice, i, list) => {
         const text = (
             <Table.Cell>
-                {choice}
+                {choice} ({ballot.getAddress(i)})
             </Table.Cell>
         );
-        const address = (
-            <Table.Cell>
-                {ballot.getAddress(i)}
-            </Table.Cell>
-        );
+        // const address = (
+        //     <Table.Cell>
+        //         {ballot.getAddress(i)}
+        //     </Table.Cell>
+        // );
 
         return (
             <Table.Row key={i}>
                 {i === 0 && <Table.Cell rowSpan={list.length}>
-                    <strong>Choices</strong>
+                    <strong>Vote Choices</strong>
                 </Table.Cell>}
                 {text}
-                {address}
+                {/* {address} */}
             </Table.Row>
         );
     }

@@ -30,23 +30,20 @@ class App extends Component {
               VoteBox.io
               <Header.Subheader>Voting on the Bitcoin Cash blockchain</Header.Subheader>
             </Header>
-
             <BadgerMessage />
           </div>
-
           <Divider />
           <Menu pointing secondary>
-            <MenuItem exact to='/'>
-              New ballot
+            <MenuItem to='/votes'>
+              Cast My Votes
             </MenuItem>
             <MenuItem to='/ballots'>
-              Find ballot
+              Find Existing Elections
             </MenuItem>
-            <MenuItem to='/votes'>
-              My Votes
+            <MenuItem exact to='/'>
+              Create A New Election
             </MenuItem>
           </Menu>
-
           <Switch>
             <Route exact path='/' component={CreateBallot} />
             <Route path='/ballots' component={BallotFinder} />
