@@ -144,7 +144,7 @@ class BallotFinderBody extends Component {
 
                     <Table.Row>
                         <Table.Cell>
-                            <strong>Voting cards</strong>
+                            <strong>Voter count</strong>
                         </Table.Cell>
                         <Table.Cell>
                             {ballot.getQuantity().toString(10)}

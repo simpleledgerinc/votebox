@@ -35,7 +35,7 @@ class MyVotes extends Component {
             <div>
                 <Input style={{width: "470px"}}
                     icon={<Icon name='search' inverted circular link onClick={this.handleSearch} />}
-                    placeholder='Enter simpleledger address holding voting tokens'
+                    placeholder='Enter a simpleledger address holding your voting tokens'
                     value={this.state.address}
                     onChange={this.handleChange}/>
                 {BadgerWallet.hasInstalled() && <Button onClick={this.handleBadgerFill}>Fill with Badger wallet address</Button>}
@@ -131,7 +131,7 @@ class MyVotesBody extends Component {
                     </Table.Row>
                     <Table.Row>
                         <Table.Cell>
-                            <strong>Your voting cards</strong>
+                            <strong>Your voter count</strong>
                         </Table.Cell>
                         <Table.Cell>
                             {cards.toString(10)}
@@ -139,7 +139,7 @@ class MyVotesBody extends Component {
                     </Table.Row>
                     <Table.Row>
                         <Table.Cell>
-                            <strong>Total voting cards</strong>
+                            <strong>Total voter count</strong>
                         </Table.Cell>
                         <Table.Cell>
                             {ballot.getQuantity().toString(10)}
@@ -159,7 +159,7 @@ class MyVotesBody extends Component {
                     <Icon name='circle notched' loading />
                     <Message.Content>
                         <Message.Header>Just one second</Message.Header>
-                        Loading your available voting cards
+                        Looking for voting ballots at this address
                     </Message.Content>
                 </Message>
             );
