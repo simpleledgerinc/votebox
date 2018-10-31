@@ -28,7 +28,7 @@ class App extends Component {
           <div className='app-header'>
             <Header as='h2' icon>
               <img className="logo" src={logo} /> <br />
-              <Header.Subheader>Voting on the Bitcoin Cash blockchain</Header.Subheader>
+              <Header.Subheader>The Decentralized Voting and Election System for Bitcoin.</Header.Subheader>
             </Header>
             <BadgerMessage />
           </div>

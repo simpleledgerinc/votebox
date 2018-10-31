@@ -18,8 +18,8 @@ export default class CreateBallotForm extends Component {
     state = {
         title: '',
         choices: [
-            'This is the first choice',
-            'This is the second choice'
+            'This is the first choice for the issue',
+            'This is the second choice for the issue'
         ],
         cards: new BigNumber(2),
         receiver: '',
@@ -116,34 +116,34 @@ export default class CreateBallotForm extends Component {
             <Form onSubmit={this.handleSubmit}>
                 <Form.Group widths='equal'>
                     <Form.Field>
-                        <label>Title</label>
+                        <label>Title of the Issue to be Voted On:</label>
                         <Form.Input required
                             name='title'
-                            placeholder='Title'
+                            placeholder='Issue to vote on'
                             value={this.state.title}
                             onChange={this.handleChange} />
                     </Form.Field>
 
                     <Form.Field>
-                        <label>Ballot cards</label>
+                        <label>How many votes will be cast?</label>
                         <Form.Input required
                             name='cards'
                             type='number' min='2' max='18446744073709551615'
-                            placeholder='Number of ballot cards to create'
+                            placeholder='Enter quantity of vote tokens to be issued.'
                             value={this.state.cards}
                             onChange={this.handleChange} />
                     </Form.Field>
                 </Form.Group>
 
                 <Form.Field>
-                    <label>Choices</label>
+                    <label>Issue Choices:</label>
                     {this.renderList()}
                 </Form.Field>
 
                 {/* <Form.Group widths='equal'> */}
 
                 <Form.Field>
-                    <label>Ballot cards receiver</label>
+                    <label>Address to initially receive voter tokens:</label>
                     <Form.Input required
                         name='receiver'
                         placeholder='Simpleledger address of ballot cards receiver'
@@ -157,7 +157,7 @@ export default class CreateBallotForm extends Component {
                 </Form.Field>
 
                 <Form.Field>
-                    <label>End of voting</label>
+                    <label>Vote expiration time:</label>
                     <Form.Input required
                         name='end' type='datetime-local'
                         value={this.state.end}
