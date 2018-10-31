@@ -10,8 +10,8 @@ export default class BadgerMessage extends PureComponent {
         if (!BadgerWallet.hasInstalled()) {
             return (
                 <Message info>
-                    <Message.Header>Install Badger for greater experience</Message.Header>
-                    <a href="https://badgerwallet.cash" target="_blank">Visit the Badger website</a>
+                    <Message.Header>Optional: Install BadgerWallet for optimized voting experience</Message.Header>
+                    <a href="https://badgerwallet.cash" target="_blank">https://badgerwallet.cash</a>
                 </Message>
             );
         }

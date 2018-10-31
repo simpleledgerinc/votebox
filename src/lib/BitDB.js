@@ -1,6 +1,9 @@
 import { Buffer } from 'buffer';
 import Ballot from './Ballot';
 import BigNumber from 'bignumber.js';
+import { bitdb } from 'slpjs';
+import { utils } from 'mocha';
+import { toSlpAddress } from 'slpjs/lib/utils';
 
 const endpoint = 'https://bitdb.network/q/';
 
@@ -25,6 +28,18 @@ class BitDB {
 
         const json = await res.json();
         return json;
+    }
+
+    async getTokenBalances(tokenId, ignore=[]){
+        let holders = await bitdb.getTokenBalances(this._apiKey, tokenId);
+
+        ignore.forEach(i => {
+            holders = holders.filter((o) => { return toSlpAddress(o.address) !== i })
+        });
+
+        holders = holders.map((o) => { return {"address": toSlpAddress(o.address), "amount": o.amount }});
+
+        return holders;
     }
 
     async getBallot(tokenId){

@@ -19,6 +19,7 @@ import MenuItem from './MenuItem';
 
 import './App.css';
 import logo from '../images/votebox-logo.png';
+import CreateAirdrop from './CreateAirdrop';
 
 class App extends Component {
   render() {
@@ -35,23 +36,23 @@ class App extends Component {
           <Divider />
           <Menu pointing secondary>
             <MenuItem to='/votes'>
-              Cast My Votes
+              Cast My Vote
             </MenuItem>
             <MenuItem to='/ballots'>
-              Find Existing Elections
+              Search for an Election
             </MenuItem>
             <MenuItem exact to='/'>
-              Create A New Election
+              Create New Election
             </MenuItem>
-            <MenuItem exact to='/distribute'>
-              Register Voters via Airdrop
+            <MenuItem exact to='/airdrop'>
+              Voter Registration
             </MenuItem>
           </Menu>
           <Switch>
             <Route exact path='/' component={CreateBallot} />
             <Route path='/ballots' component={BallotFinder} />
             <Route path='/votes' component={MyVotes} />
-            <Route path='/distribute' component={DistributeVotes} />
+            <Route path='/airdrop' component={CreateAirdrop} />
           </Switch>
         </Segment>
       </Container>

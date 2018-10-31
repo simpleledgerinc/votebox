@@ -38,7 +38,7 @@ class MyVotes extends Component {
                     placeholder='Enter a simpleledger address holding your voting tokens'
                     value={this.state.address}
                     onChange={this.handleChange}/>
-                {BadgerWallet.hasInstalled() && <Button onClick={this.handleBadgerFill}>Fill with Badger wallet address</Button>}
+                {BadgerWallet.hasInstalled() && <Button onClick={this.handleBadgerFill}>Fill with BadgerWallet address</Button>}
                 <Route path="/votes/:address" component={MyVotesBody} />
             </div>
         );

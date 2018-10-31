@@ -1,6 +1,6 @@
 # Votebox.io
 
-## Badger Document File
+## Voting Token Document File Format
 
 | Length | Type                       |
 | ------ | -------------------------- |
@@ -14,5 +14,3 @@
 
 1. Download dependencies: `yarn`
 2. Run project: `yarn start`
-
-

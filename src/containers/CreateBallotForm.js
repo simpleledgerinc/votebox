@@ -149,7 +149,7 @@ export default class CreateBallotForm extends Component {
                         placeholder='Simpleledger address of ballot cards receiver'
                         action={BadgerWallet.hasInstalled() ? {
                             type:    'button',
-                            content: 'Fill with Badger wallet address',
+                            content: 'Fill with BadgerWallet address',
                             onClick: this.handleBadgerFill
                         } : null}
                         value={this.state.receiver}
