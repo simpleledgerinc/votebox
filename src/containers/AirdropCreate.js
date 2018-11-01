@@ -4,37 +4,53 @@ import {
     Icon,
     Segment
 } from 'semantic-ui-react';
+import Token from '../lib/Token';
 
-import DistributeVotes from './DistributeVotes';
-import PayWidget from './PayWidget';
-import UploadWidget from './UploadWidget';
+import AirdropVoterList from './AirdropVoterList';
+import AirdropElectionSelection from './AirdropElectionSelection';
+import AirdropPayWidget from './AirdropPayWidget';
+import AirdropWidget from './AirdropWidget';
 
 const STEP_LIST   = 0
-    , STEP_PAY    = 1
-    , STEP_AIRDROP = 2;
+    , STEP_VOTE   = 1
+    , STEP_PAY    = 2
+    , STEP_AIRDROP = 3;
 
-export default class CreateAirdrop extends Component {
+export default class AirdropCreate extends Component {
     state = {
         step: STEP_LIST,
-        holders: null
+        holders: null, 
+        voteId: null
     };
 
     renderStepList = () => (
-        <DistributeVotes
+        <AirdropVoterList
             onSubmit={this.handleFormSubmitted} />
     );
 
-    handleFormSubmitted = ballot => {
-        console.log(ballot);
+    handleFormSubmitted = (holders) => {
         this.setState({
-            step: STEP_PAY,
-            ballot
+            step: STEP_VOTE,
+            holders: holders
         });
     };
 
+    renderStepVote = () => (
+        <AirdropElectionSelection 
+            onSubmit={this.handleElectionSubmitted} />
+    );
+
+    handleElectionSubmitted = (voteId) => {
+        this.setState({
+            step: STEP_PAY, 
+            voteId: voteId
+        });
+    }
+
     renderStepPay = () => (
-        <PayWidget
-            amount={this.state.ballot.estimateCost()}
+        <AirdropPayWidget
+            amountBCH={Token.estimateAirdropCost(this.state.holders)}
+            amountTokens={this.state.holders.reduce((total, holder)=>{return total + holder.amount}, 0)}
             onReceivePayment={this.handlePaymentReceived} />
     );
 
@@ -45,7 +61,7 @@ export default class CreateAirdrop extends Component {
     };
 
     renderStepAirdrop = () => (
-        <UploadWidget
+        <AirdropWidget
             ballot={this.state.ballot} />
     );
 
@@ -55,7 +71,14 @@ export default class CreateAirdrop extends Component {
                 <Step active={this.state.step === STEP_LIST}>
                     <Icon name='configure' />
                     <Step.Content>
-                        <Step.Title>Select Voters</Step.Title>
+                        <Step.Title>Get Voter List</Step.Title>
+                    </Step.Content>
+                </Step>
+
+                <Step active={this.state.step === STEP_VOTE} disabled={this.state.step < STEP_VOTE}>
+                    <Icon name='configure' />
+                    <Step.Content>
+                        <Step.Title>Select Election</Step.Title>
                     </Step.Content>
                 </Step>
 
@@ -69,7 +92,7 @@ export default class CreateAirdrop extends Component {
                 <Step active={this.state.step === STEP_AIRDROP} disabled={this.state.step < STEP_AIRDROP}>
                     <Icon name='upload' />
                     <Step.Content>
-                        <Step.Title>Airdrop</Step.Title>
+                        <Step.Title>Airdrop Token to Voters</Step.Title>
                     </Step.Content>
                 </Step>
             </Step.Group>

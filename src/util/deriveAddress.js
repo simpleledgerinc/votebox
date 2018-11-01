@@ -33,7 +33,12 @@ export const deriveRedeemScript = function(choice, end){
 
     redeemScript.push(0xb1); // OP_HODL
 
-    return BITBOX.Script.encode(redeemScript);
+    let script = BITBOX.Script.encode(redeemScript);
+
+    console.log(redeemScript);
+    console.log(script);
+    
+    return script;
 }
 
 export default function(choice, end){

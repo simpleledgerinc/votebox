@@ -95,6 +95,17 @@ export default class Token {
         return slp.calculateGenesisCost(opReturn.length, 1, withBaton ? true : null, true);
     }
 
+    static estimateAirdropCost(holders){
+        let outputQtys = holders.map((h => { return h.amount }));
+        let config = {
+            tokenIdHex: '0000000000000000000000000000000000000000000000000000000000000000',
+            outputQtyArray: outputQtys
+        }
+        let opret = slp.buildSendOpReturn(config)
+        let inputUtxoQty = 1;
+        return slp.calculateSendCost(opret.length, inputUtxoQty, outputQtys.length + 1);
+    }
+
     buildGenesisTx(utxo, wif, receiverAddress, batonAddress = null){
         return slp.buildRawGenesisTx({
             slpGenesisOpReturn: this.buildOpReturn(!!batonAddress), 

@@ -13,13 +13,12 @@ import {
 import BadgerMessage from './BadgerMessage';
 import CreateBallot from './CreateBallot';
 import BallotFinder from './BallotFinder';
-import DistributeVotes from './DistributeVotes';
+import AirdropCreate from './AirdropCreate';
 import MyVotes from './MyVotes';
 import MenuItem from './MenuItem';
 
 import './App.css';
 import logo from '../images/votebox-logo.png';
-import CreateAirdrop from './CreateAirdrop';
 
 class App extends Component {
   render() {
@@ -35,24 +34,24 @@ class App extends Component {
           </div>
           <Divider />
           <Menu pointing secondary>
+            <MenuItem exact to='/'>
+              Create New Vote Token
+            </MenuItem>
             <MenuItem to='/votes'>
-              Cast My Vote
+              Cast My Votes
             </MenuItem>
             <MenuItem to='/ballots'>
-              Search for an Election
-            </MenuItem>
-            <MenuItem exact to='/'>
-              Create New Election
+              Find Voting Results
             </MenuItem>
             <MenuItem exact to='/airdrop'>
-              Voter Registration
+              Distribute Vote Tokens
             </MenuItem>
           </Menu>
           <Switch>
             <Route exact path='/' component={CreateBallot} />
             <Route path='/ballots' component={BallotFinder} />
             <Route path='/votes' component={MyVotes} />
-            <Route path='/airdrop' component={CreateAirdrop} />
+            <Route path='/airdrop' component={AirdropCreate} />
           </Switch>
         </Segment>
       </Container>

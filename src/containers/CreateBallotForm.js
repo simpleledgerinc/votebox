@@ -1,8 +1,5 @@
 import React, { Component } from 'react';
-import {
-    Form,
-    Button
-} from 'semantic-ui-react';
+import { Form, Button } from 'semantic-ui-react';
 import PropTypes from 'prop-types';
 import BigNumber from 'bignumber.js';
 import Ballot from '../lib/Ballot';
@@ -116,7 +113,7 @@ export default class CreateBallotForm extends Component {
             <Form onSubmit={this.handleSubmit}>
                 <Form.Group widths='equal'>
                     <Form.Field>
-                        <label>Title of the Issue to be Voted On:</label>
+                        <label>Description of Issue to Vote On:</label>
                         <Form.Input required
                             name='title'
                             placeholder='Issue to vote on'
@@ -155,7 +152,7 @@ export default class CreateBallotForm extends Component {
                         value={this.state.receiver}
                         onChange={this.handleChange} />
                 </Form.Field>
-
+                
                 <Form.Field>
                     <label>Vote expiration time:</label>
                     <Form.Input required

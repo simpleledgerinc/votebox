@@ -1,17 +1,18 @@
 import React, { Component } from 'react';
-import { Icon, Input, Table, Message } from 'semantic-ui-react';
+import { Icon, Input, Table, Message, Form, Button } from 'semantic-ui-react';
 import BitDB from '../lib/BitDB';
-import {utils} from 'slpjs';
+import { utils } from 'slpjs';
 import BigNumber from 'bignumber.js';
 import setState from '../util/asyncSetState';
 import { Doughnut } from 'react-chartjs-2';
+
 import {
     Route,
     withRouter
 } from "react-router-dom";
 import Token from '../lib/Token';
 
-class DistributeVotes extends Component {
+class AirdropVoterList extends Component {
     state = {
         tokenId: ''
     }
@@ -29,21 +30,32 @@ class DistributeVotes extends Component {
     render() {
         return (
             <div>
-                <Input style={{width: "470px"}} icon={<Icon name='search' inverted circular link onClick={this.handleSearch} />} placeholder='Enter token id controlling airdrop distribution' value={this.state.tokenId} onChange={this.handleChange} />
-                <Route path="/airdrop/:id" component={DistributeVotesBody} />
+                <Input style={{width: "470px"}} icon={<Icon name='search' inverted circular link onClick={this.handleSearch} />} placeholder='Enter id for a token already held by the voters' value={this.state.tokenId} onChange={this.handleChange} />
+                <Route path="/airdrop/:id" component={AirdropVoterListBody} />
             </div>
         );
     }
 }
 
-export default withRouter(DistributeVotes);
+export default withRouter(AirdropVoterList);
 
-class DistributeVotesBody extends Component {
+class AirdropVoterListBody extends Component {
     state = {
         fetching: true,
         fetchError: null,
         holders: [],
     };
+
+    handleSubmit = () => {
+        // const ballot = new Ballot();
+        // ballot.setTitle(this.state.title);
+        // ballot.setChoices(this.state.choices);
+        // ballot.setEnd(new Date(this.state.end));
+        // ballot.setQuantity(this.state.cards);
+        // ballot.setReceiver(this.state.receiver);
+        // this.props.onSubmit(ballot);
+        this.props.onSubmit(this.state.holders);
+    }
 
     componentDidMount(){
         const { id } = this.props.match.params;
@@ -121,21 +133,24 @@ class DistributeVotesBody extends Component {
         const holders = this.state.holders;
 
         return (
-            <Table>
-                <Table.Body>
-                    <Table.Row>
-                        <Table.Cell>
-                            <strong>Token ID Address List</strong>
-                        </Table.Cell>
-                        <Table.Cell>
-                            {this.props.match.params.id}
-                        </Table.Cell>
-                    </Table.Row>
-                    
-                    {holders.map(this.renderTableHolders(holders))}
+            <Form onSubmit={this.handleSubmit}>
+                <Table>
+                    <Table.Body>
+                        <Table.Row>
+                            <Table.Cell>
+                                <strong>Token ID for List</strong>
+                            </Table.Cell>
+                            <Table.Cell>
+                                {this.props.match.params.id}
+                            </Table.Cell>
+                        </Table.Row>
+                        
+                        {holders.map(this.renderTableHolders(holders))}
 
-                </Table.Body>
-            </Table>
+                    </Table.Body>
+                </Table>
+                <Button id='create-submit' type='submit' color='green'>Distribute Vote Tokens to this List</Button>
+            </Form>
         );
     }
 
