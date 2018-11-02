@@ -31,7 +31,7 @@ class BitDB {
     }
 
     async getTokenBalances(tokenId, ignore=[]){
-        let holders = await bitdb.getTokenBalances(this._apiKey, tokenId);
+        let holders = await bitdb.getBalances(this._apiKey, tokenId);
 
         ignore.forEach(i => {
             holders = holders.filter((o) => { return toSlpAddress(o.address) !== i })
