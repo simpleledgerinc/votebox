@@ -31,7 +31,7 @@ class AirdropVoterList extends Component {
         return (
             <div>
                 <Input style={{width: "470px"}} icon={<Icon name='search' inverted circular link onClick={this.handleSearch} />} placeholder='Enter id for a token already held by the voters' value={this.state.tokenId} onChange={this.handleChange} />
-                <Route path="/airdrop/:id" component={AirdropVoterListBody} />
+                <Route path="/airdrop/:id" component={() => <AirdropVoterListBody onSubmit={this.props.onSubmit} id={this.state.tokenId}/>} />
             </div>
         );
     }
@@ -47,24 +47,17 @@ class AirdropVoterListBody extends Component {
     };
 
     handleSubmit = () => {
-        // const ballot = new Ballot();
-        // ballot.setTitle(this.state.title);
-        // ballot.setChoices(this.state.choices);
-        // ballot.setEnd(new Date(this.state.end));
-        // ballot.setQuantity(this.state.cards);
-        // ballot.setReceiver(this.state.receiver);
-        // this.props.onSubmit(ballot);
         this.props.onSubmit(this.state.holders);
     }
 
     componentDidMount(){
-        const { id } = this.props.match.params;
+        const { id } = this.props;
         this.loadToken(id).catch(console.error);
     }
 
     componentWillUpdate(nextProps){
-        if(this.props.match.params.id !== nextProps.match.params.id){
-            this.loadToken(nextProps.match.params.id).catch(console.error);
+        if(this.props.id !== nextProps.id){
+            this.loadToken(nextProps.id).catch(console.error);
         }
     }
 
@@ -106,17 +99,6 @@ class AirdropVoterListBody extends Component {
             </Table.Cell>
         );
 
-        // const votes = (
-        //     <Table.Cell>
-        //         {this.state.balances[i].toString(10)}
-        //     </Table.Cell>
-        // );
-        // const address = (
-        //     <Table.Cell>
-        //         {ballot.getAddress(i)}
-        //     </Table.Cell>
-        // );
-
         return (
             <Table.Row key={i}>
                 {i === 0 && <Table.Cell rowSpan={list.length}>
@@ -141,7 +123,7 @@ class AirdropVoterListBody extends Component {
                                 <strong>Token ID for List</strong>
                             </Table.Cell>
                             <Table.Cell>
-                                {this.props.match.params.id}
+                                {this.props.id}
                             </Table.Cell>
                         </Table.Row>
                         
@@ -153,40 +135,6 @@ class AirdropVoterListBody extends Component {
             </Form>
         );
     }
-
-    // renderChart(){
-    //     const labels = this.state.ballot.getChoices().map((choice, i) => `Choice #${i + 1}`)
-    //         , sum    = this.state.balances.reduce((sum, cur) => sum.plus(cur), new BigNumber(0));
-
-    //     let data = [];
-    //     for(let i = 0; i < this.state.balances.length; i++){
-    //         let percent;
-    //         if(sum.isZero()){
-    //             percent = 1 / labels.length;
-    //         } else {
-    //             percent = this.state.balances[i].dividedBy(sum).toNumber();
-    //         }
-    //         data.push(percent * 100);
-    //     }
-
-    //     return (
-    //         <Doughnut
-    //             data={{
-    //                 labels,
-    //                 datasets: [{
-    //                     data, 
-    //                     backgroundColor: [
-    //                         '#F59332', '#478559', '#020202', '#4D4D4D', '#854673'
-    //                     ],
-    //                     hoverBackgroundColor: []
-    //                 }]
-    //             }}
-    //             width={400}
-    //             options={{
-    //                 maintainAspectRatio: true
-    //             }} />
-    //     );
-    // }
 
     render(){
         if (this.state.fetching) {

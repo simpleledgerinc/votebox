@@ -14,11 +14,15 @@ import Token from '../lib/Token';
 
 class AirdropElectionSelection extends Component {
     state = {
-        voteId: ''
+        tokenId: '',
+        searching: false
     }
 
     handleSearch = () => {
-        this.props.history.push('/airdrop/' + this.state.tokenId);
+        // this.props.history.push('/airdrop/' + this.state.tokenId);
+        this.setState({
+            searching: true
+        })
     };
 
     handleChange = (e, { name, value }) => {
@@ -28,69 +32,71 @@ class AirdropElectionSelection extends Component {
     };
 
     render() {
-        return (
-            <div>
-                <Input style={{width: "470px"}} icon={<Icon name='search' inverted circular link onClick={this.handleSearch} />} placeholder='Enter token id controlling airdrop distribution' value={this.state.tokenId} onChange={this.handleChange} />
-                <Route path="/airdrop/:id" component={AirdropVoterListBody} />
-            </div>
-        );
+        if (this.state.searching) {
+            return (
+                <div>
+                    <Input style={{width: "470px"}} icon={<Icon name='search' inverted circular link onClick={this.handleSearch} />} placeholder='Enter token id' value={this.state.tokenId} onChange={this.handleChange} />
+                    <AirdropElectionSelectionBody onSubmit={this.props.onSubmit} id={this.state.tokenId}/>
+                </div>
+            );
+        } else {
+            return (
+                <div>
+                    <Input style={{width: "470px"}} icon={<Icon name='search' inverted circular link onClick={this.handleSearch} />} placeholder='Enter token id' value={this.state.tokenId} onChange={this.handleChange} />
+                </div>
+            )
+        }
     }
 }
 
 export default withRouter(AirdropElectionSelection);
 
-class AirdropVoterListBody extends Component {
+class AirdropElectionSelectionBody extends Component {
     state = {
+        ballot: null,
         fetching: true,
         fetchError: null,
-        holders: [],
+        balances: [],
     };
 
     handleSubmit = () => {
-        // const ballot = new Ballot();
-        // ballot.setTitle(this.state.title);
-        // ballot.setChoices(this.state.choices);
-        // ballot.setEnd(new Date(this.state.end));
-        // ballot.setQuantity(this.state.cards);
-        // ballot.setReceiver(this.state.receiver);
-        // this.props.onSubmit(ballot);
         this.props.onSubmit(this.state.holders);
     }
 
     componentDidMount(){
-        const { id } = this.props.match.params;
-        this.loadToken(id).catch(console.error);
+        const { id } = this.props;
+        this.loadBallot(id).catch(console.error);
     }
 
     componentWillUpdate(nextProps){
-        if(this.props.match.params.id !== nextProps.match.params.id){
-            this.loadToken(nextProps.match.params.id).catch(console.error);
+        if(this.props.id !== nextProps.id){
+            this.loadBallot(nextProps.id).catch(console.error);
         }
     }
 
-    async loadToken(id) {
+    async loadBallot(id) {
         await setState(this, {
+            ballot: null,
             fetching: true,
             fetchError: null,
-            holders: [],
+            balances: []
         });
 
         try {
             const ballot = await BitDB.getBallot(id);
-
-            const voteAddr = [];
+    
+            const balances = [];
             for(let i = 0; i < ballot.getChoices().length; i++){
                 const addr = ballot.getAddress(i);
-                voteAddr.push(addr);
+                const balance = await Token.getBalance(id, addr);
+                balances.push(balance);
             }
-
-            const holders = await BitDB.getTokenBalances(id, voteAddr);
 
             await setState(this, {
                 fetching: false,
-                holders
+                ballot,
+                balances
             });
-
         } catch(err){
             await setState(this, {
                 fetching: false,
@@ -99,28 +105,17 @@ class AirdropVoterListBody extends Component {
         }
     }
 
-    renderTableHolders = (item) => (holder, i, list) => {
+    renderTableChoice = (ballot) => (choice, i, list) => {
         const text = (
             <Table.Cell>
-               { holder.amount } - { holder.address }
+               {this.state.balances[i].toString(10)} - {choice} ({ballot.getAddress(i)})
             </Table.Cell>
         );
-
-        // const votes = (
-        //     <Table.Cell>
-        //         {this.state.balances[i].toString(10)}
-        //     </Table.Cell>
-        // );
-        // const address = (
-        //     <Table.Cell>
-        //         {ballot.getAddress(i)}
-        //     </Table.Cell>
-        // );
 
         return (
             <Table.Row key={i}>
                 {i === 0 && <Table.Cell rowSpan={list.length}>
-                    <strong>Distribution list (shares - address)</strong>
+                    <strong>Results</strong>
                 </Table.Cell>}
                 {text}
                 {/* {votes} */}
@@ -130,63 +125,89 @@ class AirdropVoterListBody extends Component {
     }
 
     renderTable() {
-        const holders = this.state.holders;
+        const ballot = this.state.ballot;
 
         return (
-            <Form onSubmit={this.handleSubmit}>
-                <Table>
-                    <Table.Body>
-                        <Table.Row>
-                            <Table.Cell>
-                                <strong>Voter List TokenId</strong>
-                            </Table.Cell>
-                            <Table.Cell>
-                                {this.props.match.params.id}
-                            </Table.Cell>
-                        </Table.Row>
-                        
-                        { holders.map(this.renderTableHolders(holders)) }
+            <Table>
+                <Table.Body>
+                    <Table.Row>
+                        <Table.Cell>
+                            <strong>Ballot ID</strong>
+                        </Table.Cell>
+                        <Table.Cell>
+                            {this.props.id}
+                        </Table.Cell>
+                    </Table.Row>
 
-                    </Table.Body>
-                </Table>
-                <Button id='create-submit' type='submit' color='green'>Distribute Vote Tokens to this List</Button>
-            </Form>
+                    <Table.Row>
+                        <Table.Cell>
+                            <strong>Title</strong>
+                        </Table.Cell>
+                        <Table.Cell>
+                            {ballot.getTitle()}
+                        </Table.Cell>
+                    </Table.Row>
+                    
+                    {ballot.getChoices().map(this.renderTableChoice(ballot))}
+
+                    <Table.Row>
+                        <Table.Cell>
+                            <strong>Voter count</strong>
+                        </Table.Cell>
+                        <Table.Cell>
+                            {ballot.getQuantity().toString(10)}
+                        </Table.Cell>
+                    </Table.Row>
+
+                    <Table.Row>
+                        <Table.Cell>
+                            <strong>End of voting</strong>
+                        </Table.Cell>
+                        <Table.Cell>
+                            {ballot.getEnd().toLocaleString()}
+                        </Table.Cell>
+                    </Table.Row>
+                </Table.Body>
+            </Table>
         );
     }
 
-    // renderChart(){
-    //     const labels = this.state.ballot.getChoices().map((choice, i) => `Choice #${i + 1}`)
-    //         , sum    = this.state.balances.reduce((sum, cur) => sum.plus(cur), new BigNumber(0));
+    renderChart(){
+        const labels = this.state.ballot.getChoices().map((choice, i) => `Choice #${i + 1}`)
+            , sum    = this.state.balances.reduce((sum, cur) => sum.plus(cur), new BigNumber(0));
 
-    //     let data = [];
-    //     for(let i = 0; i < this.state.balances.length; i++){
-    //         let percent;
-    //         if(sum.isZero()){
-    //             percent = 1 / labels.length;
-    //         } else {
-    //             percent = this.state.balances[i].dividedBy(sum).toNumber();
-    //         }
-    //         data.push(percent * 100);
-    //     }
+        let data = [];
+        for(let i = 0; i < this.state.balances.length; i++){
+            let percent;
+            if(sum.isZero()){
+                percent = 1 / labels.length;
+            } else {
+                percent = this.state.balances[i].dividedBy(sum).toNumber();
+            }
+            data.push(percent * 100);
+        }
 
-    //     return (
-    //         <Doughnut
-    //             data={{
-    //                 labels,
-    //                 datasets: [{
-    //                     data, 
-    //                     backgroundColor: [
-    //                         '#F59332', '#478559', '#020202', '#4D4D4D', '#854673'
-    //                     ],
-    //                     hoverBackgroundColor: []
-    //                 }]
-    //             }}
-    //             width={400}
-    //             options={{
-    //                 maintainAspectRatio: true
-    //             }} />
-    //     );
-    // }
+        return (
+            <div>
+                <Doughnut
+                    data={{
+                        labels,
+                        datasets: [{
+                            data, 
+                            backgroundColor: [
+                                '#F59332', '#478559', '#020202', '#4D4D4D', '#854673'
+                            ],
+                            hoverBackgroundColor: []
+                        }]
+                    }}
+                    width={400}
+                    options={{
+                        maintainAspectRatio: true
+                    }} />
+                    <Button id='create-submit' type='submit' color='green'>Submit</Button>
+            </div>
+        );
+    }
 
     render(){
         if (this.state.fetching) {
@@ -195,7 +216,7 @@ class AirdropVoterListBody extends Component {
                     <Icon name='circle notched' loading />
                     <Message.Content>
                         <Message.Header>Just one second</Message.Header>
-                        Loading token holders list
+                        Loading ballot information
                     </Message.Content>
                 </Message>
             );
@@ -204,16 +225,16 @@ class AirdropVoterListBody extends Component {
         if (this.state.fetchError) {
             return (
                 <Message error>
-                    There was an error loading the token holders: {String(this.state.fetchError)}
+                    There was an error loading the ballot: {String(this.state.fetchError)}
                 </Message>
             );
         }
 
-        const holders = this.state.holders;
-        if(!holders){
+        const ballot = this.state.ballot;
+        if(!ballot){
             return (
                 <Message error>
-                    No holders of this token. Please check the token id.
+                    Ballot not found
                 </Message>
             );
         }
@@ -221,7 +242,7 @@ class AirdropVoterListBody extends Component {
         return (
             <div>
                 {this.renderTable()}
-                {/* {this.renderChart()} */}
+                {this.renderChart()}
             </div>
         );
     }

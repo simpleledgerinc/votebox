@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import {
     Step,
     Icon,
-    Segment
+    Segment,
+    Button
 } from 'semantic-ui-react';
 import Token from '../lib/Token';
 
@@ -32,7 +33,7 @@ export default class AirdropCreate extends Component {
         this.setState({
             step: STEP_VOTE,
             holders: holders
-        });
+        })
     };
 
     renderStepVote = () => (
@@ -99,6 +100,7 @@ export default class AirdropCreate extends Component {
 
             <Segment attached>
                 {this.state.step === STEP_LIST && this.renderStepList()}
+                {this.state.step === STEP_VOTE && this.renderStepVote()}
                 {this.state.step === STEP_PAY && this.renderStepPay()}
                 {this.state.step === STEP_AIRDROP && this.renderStepAirdrop()}
             </Segment>

@@ -13,6 +13,7 @@ class MenuItem extends Component {
     };
 
     render(){
+        console.log('props', this.props)
         return (
             <Route
                 exact={this.props.exact} path={this.props.to}
