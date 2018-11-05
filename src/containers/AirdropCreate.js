@@ -44,15 +44,15 @@ export default class AirdropCreate extends Component {
     handleElectionSubmitted = (voteId) => {
         this.setState({
             step: STEP_PAY, 
-            voteId: voteId
+            voteId
         });
     }
 
     renderStepPay = () => (
         <AirdropPayWidget
-            amountBCH={Token.estimateAirdropCost(this.state.holders)}
-            amountTokens={this.state.holders.reduce((total, holder)=>{return total + holder.amount}, 0)}
-            onReceivePayment={this.handlePaymentReceived} />
+            tokenId={this.state.voteId} />
+        // <AirdropPayWidget
+        //     tokenId='01cda263914f1c3d51eb4c178959c82b8cb057f8f0c492dbc24da6d0f15cdebf' />
     );
 
     handlePaymentReceived = () => {
@@ -84,9 +84,9 @@ export default class AirdropCreate extends Component {
                 </Step>
 
                 <Step active={this.state.step === STEP_PAY} disabled={this.state.step < STEP_PAY}>
-                    <Icon name='bitcoin' />
+                    <Icon name='configure' />
                     <Step.Content>
-                        <Step.Title>Pay for Airdrop</Step.Title>
+                        <Step.Title>Configure Distribution</Step.Title>
                     </Step.Content>
                 </Step>
 

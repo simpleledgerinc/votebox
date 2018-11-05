@@ -1,98 +1,143 @@
 import React, { Component } from 'react';
 import {
     Button,
-    Message
+    Table,
+    Icon,
+    Message,
+    Header
 } from 'semantic-ui-react';
-import PropTypes from 'prop-types';
-import QRCode from 'qrcode.react';
-import BITBOX from '../util/bitbox';
-import MoneyButton from '@moneybutton/react-money-button';
-
-import BrowserWallet from '../lib/BrowserWallet';
-import BadgerWallet from '../lib/BadgerWallet';
-
-import './PayWidget.css';
-
-const refreshRate = 2000;
+import BitDB from '../lib/BitDB';
+import Token from '../lib/Token';
+import DistributionListTable from './components/DistributionListTable'
 
 export default class AirdropPayWidget extends Component {
-    static propTypes = {
-        amountBCH: PropTypes.number.isRequired,
-        amountToken: PropTypes.number.isRequired,
-        onReceivePayment: PropTypes.func.isRequired
-    };
-
-    componentDidMount() {
-        this._interval = window.setInterval(this.checkPayment, refreshRate);
-        this.checkPayment();
-    }
-
-    componentWillUnmount() {
-        window.clearInterval(this._interval);
-    }
-
-    checkPayment = async () => {
-        try {
-            const amount = this.props.amount
-                , out = await BrowserWallet.findUTXO(amount);
-
-            if (out) {
-                this._interval && window.clearInterval(this._interval);
-                this.props.onReceivePayment(out);
-            }
-        } catch (err) {
-            console.error(err);
+    constructor() {
+        super()
+        this.state = {
+            tokenId: '',
+            ballot: null,
+            balances: [],
+            fetching: true,
+            fetchError: null,
+            tableError: false
         }
     }
 
-    renderQRCode() {
-        const amount = BITBOX.BitcoinCash.toBitcoinCash(this.props.amount)
-            , value = BrowserWallet.getAddress().toUpperCase() + '?amount=' + amount;
-        return <QRCode value={value} level='M' />;
+    componentDidMount() {
+        const { tokenId } = this.props
+        this.setState({
+            tokenId
+        })
+        this.loadToken(tokenId).catch(console.error)
     }
 
-    renderMessage() {
-        const addr = BrowserWallet.getAddress()
-            , amount = BITBOX.BitcoinCash.toBitcoinCash(this.props.amount);
+    async loadToken(id) {
+        await this.setState({
+            ballot: null,
+            balances: [],
+            fetching: true,
+            fetchingError: null
+        });
+
+        try {
+            const ballot = await BitDB.getBallot(id);
+    
+            const balances = [];
+            for(let i = 0; i < ballot.getChoices().length; i++){
+                const addr = ballot.getAddress(i);
+                const balance = await Token.getBalance(id, addr);
+                balances.push(balance);
+            }
+
+            this.setState({
+                ballot,
+                balances,
+                fetching: false
+            })
+        } catch(err){
+            this.setState({
+                fetching: false,
+                fetchError: err,
+            })
+        }
+    }
+
+    renderTable() {
+        const { ballot } = this.state;
 
         return (
-            <Message size='large' className='message'>
-                Please send <strong>exactly {amount} BCH</strong> to<br />
-                <strong>{addr}</strong>
-            </Message>
+            <Table>
+                <Table.Body>
+                    <Table.Row>
+                        <Table.Cell>
+                            <strong>Vote Token ID:</strong>
+                        </Table.Cell>
+                        <Table.Cell>
+                            {this.state.tokenId}
+                        </Table.Cell>
+                    </Table.Row>
+
+                    <Table.Row>
+                        <Table.Cell>
+                            <strong>Vote Token Name:</strong>
+                        </Table.Cell>
+                        <Table.Cell>
+                            {ballot.getTitle()}
+                        </Table.Cell>
+                    </Table.Row>
+
+                    <Table.Row>
+                        <Table.Cell>
+                            <strong>Number of Vote Tokens to be distributed:</strong>
+                        </Table.Cell>
+                        <Table.Cell>
+                            {ballot.getQuantity().toString(10)}
+                        </Table.Cell>
+                    </Table.Row>
+                </Table.Body>
+            </Table>
         );
     }
-
-    handleBadger = () => {
-        BadgerWallet.send(BrowserWallet.getAddress(), this.props.amount);
-    }
-
-    handleWallet = () => {
-        window.open(BrowserWallet.getAddress() + '?amount=' + BITBOX.BitcoinCash.toBitcoinCash(this.props.amount));
-    }
-
-    handleMBError = (err) => {
-        console.error(err);
-    };
+    
 
     render() {
+        if (this.state.fetching) {
+            return (
+                <Message icon>
+                    <Icon name='circle notched' loading />
+                    <Message.Content>
+                        <Message.Header>Just one second</Message.Header>
+                        Loading ballot information
+                    </Message.Content>
+                </Message>
+            );
+        }
+
+        if (this.state.fetchError) {
+            return (
+                <Message error>
+                    There was an error loading the ballot: {String(this.state.fetchError)}
+                </Message>
+            );
+        }
+
+        const { ballot } = this.state;
+        if(!ballot){
+            return (
+                <Message error>
+                    Ballot not found
+                </Message>
+            );
+        }
+
         return (
             <div className='PayWidget'>
-                {this.renderMessage()}
-                <div>
-                    <div>
-                        {this.renderQRCode()}
-                    </div>
-                    <div>
-                        <Button color='green' disabled={!BadgerWallet.hasInstalled()} onClick={this.handleBadger}>Pay with Badger</Button>
-                        <Button secondary onClick={this.handleWallet}>Pay with wallet software</Button>
-                        <MoneyButton
-                            to={BrowserWallet.getAddress()}
-                            amount={BITBOX.BitcoinCash.toBitcoinCash(this.props.amount)}
-                            currency="BCH"
-                            onPayment={this.checkPayment}
-                            onError={this.handleMBError} />
-                    </div>
+                {this.renderTable()}
+                <Header size='small' style={{width: '100%'}}>Edit Distribution List</Header>
+                <br/>
+                <DistributionListTable id={this.state.tokenId}/>
+                <div style={{width: '100%', justifyContent: 'flex-end'}}>
+                    <Button disabled={this.state.tableError} style={{marginTop: '20px'}} color='green'>Proceed to Airdrop</Button>
                 </div>
             </div>
         );

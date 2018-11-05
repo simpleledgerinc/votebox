@@ -57,14 +57,18 @@ class AirdropElectionSelectionBody extends Component {
         fetching: true,
         fetchError: null,
         balances: [],
+        tokenId: ''
     };
 
     handleSubmit = () => {
-        this.props.onSubmit(this.state.holders);
+        this.props.onSubmit(this.state.tokenId);
     }
 
     componentDidMount(){
         const { id } = this.props;
+        this.setState({
+            tokenId: id
+        })
         this.loadBallot(id).catch(console.error);
     }
 
@@ -132,7 +136,7 @@ class AirdropElectionSelectionBody extends Component {
                 <Table.Body>
                     <Table.Row>
                         <Table.Cell>
-                            <strong>Ballot ID</strong>
+                            <strong>Token ID</strong>
                         </Table.Cell>
                         <Table.Cell>
                             {this.props.id}
@@ -204,7 +208,7 @@ class AirdropElectionSelectionBody extends Component {
                     options={{
                         maintainAspectRatio: true
                     }} />
-                    <Button id='create-submit' type='submit' color='green'>Submit</Button>
+                    <Button onClick={this.handleSubmit} id='create-submit' type='submit' color='green'>Submit</Button>
             </div>
         );
     }
