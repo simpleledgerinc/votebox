@@ -19,7 +19,7 @@ const STEP_LIST   = 0
 
 export default class AirdropCreate extends Component {
     state = {
-        step: STEP_VOTE,
+        step: STEP_LIST,
         holders: null, 
         voteId: null,
         ballot: null
