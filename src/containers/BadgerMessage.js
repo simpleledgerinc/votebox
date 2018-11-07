@@ -15,6 +15,15 @@ export default class BadgerMessage extends PureComponent {
                 </Message>
             );
         }
+
+        if(!BadgerWallet.isLoggedIn()){
+            return (
+                <Message warning>
+                    <Message.Header>You are not logged in to BadgerWallet</Message.Header>
+                    With BadgerWallet logged in, you will enjoy optimized voting experience
+                </Message>
+            );
+        }
         
         return null;
     }
