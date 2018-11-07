@@ -18,6 +18,10 @@ class BadgerWallet {
         return utils.toSlpAddress(addr);
     }
 
+    static isLoggedIn(){
+        return !!this.getAddress();
+    }
+
     static getBalance(addr){
         if(typeof addr === 'undefined'){
             addr = BadgerWallet.getAddress();

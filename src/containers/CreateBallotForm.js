@@ -147,6 +147,7 @@ export default class CreateBallotForm extends Component {
                         action={BadgerWallet.hasInstalled() ? {
                             type:    'button',
                             content: 'Fill with BadgerWallet address',
+                            disabled: !BadgerWallet.isLoggedIn(),
                             onClick: this.handleBadgerFill
                         } : null}
                         value={this.state.receiver}
