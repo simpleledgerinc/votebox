@@ -65,7 +65,6 @@ class DistributionListTable extends Component {
     }
 
     handleCSVRead = (data) => {
-        console.log(data)
         data.splice(0, 1)
         let temp = []
         data.map(item => {
@@ -81,7 +80,7 @@ class DistributionListTable extends Component {
         })
     }
 
-    handleCSVErorr = (error) => {
+    handleCSVError = (error) => {
         console.log(error)
     }
 

@@ -1,118 +1,62 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 import {
     Button,
-    Progress,
-    Divider
-} from 'semantic-ui-react';
-import PropTypes from 'prop-types';
-import BrowserWallet from '../lib/BrowserWallet';
-import setState from '../util/asyncSetState';
-import sleep from '../util/asyncSleep';
+    Container,
+    Progress
+} from 'semantic-ui-react'
+import './components/AirdropWidget.css'
+
 
 export default class UploadWidget extends Component {
-    static propTypes = {
-        ballot: PropTypes.any.isRequired
-    };
-
-    state = {
-        uploadPercentage: 0,
-        uploadError: null,
-        uploadFileId: '',
-
-        creationPercentage: 0,
-        creationError: null,
-        creationTokenId: ''
+    constructor() {
+        super()
+        this.state = {
+            step: 1
+        }
     }
 
-    componentDidMount(){
-        this.uploadFile();
+    handleChangeStep = (e) => {
+        console.log(e.target.id)
+        this.setState({
+            step: e.target.id
+        })
     }
 
-    uploadFile = async () => {
-        try {
-            await setState(this, {
-                uploadPercentage: 0,
-                uploadError: null,
-                uploadFileId: '',
-            });
+    renderStepSecond() {
+        if (parseInt(this.state.step) < 2) return null
+        return (
+            <div>
+                <p>Step 2: Send 0.xxxxxxxxx BCH to complete the distribution transaction</p>
+                <p>Waiting for you to send the BCH (o_o)</p>
+                <Container textAlign='right'>
+                    <Button onClick={this.handleChangeStep} id='3' basic color='black' content='Prentend Received BCH'/>
+                </Container>
+            </div>
+        )
+    }
 
-            const ballot = this.props.ballot
-            , file   = ballot.getBitcoinFile();
-
-            const fileId = await BrowserWallet.uploadBitcoinFile(file, (percentage) => {
-                this.setState({
-                    uploadPercentage: Math.floor(100 * percentage),
-                    uploadError: null
-                });
-            });
-            await setState(this, {
-                uploadPercentage: 100,
-                uploadFileId: fileId
-            });
-
-            await sleep(3000);
-            await this.createToken();
-        } catch(err){
-            console.error(err);
-            await setState(this, {
-                uploadError: err
-            });
-        }
-    };
-
-    createToken = async () => {
-        try {
-            await setState(this, {
-                creationPercentage: 0,
-                creationError: null,
-                creationTokenId: ''
-            });
-
-            const ballot = this.props.ballot
-                , fileId = this.state.uploadFileId
-                , hash   = ballot.getBitcoinFile().getHash();
-    
-            const token = ballot.getToken();
-            token.setUrl(fileId);
-            token.setHash(hash);
-
-            const tokenId = await BrowserWallet.createToken(token, ballot.getReceiver());
-            if(tokenId.length !== 64 || tokenId.split('').filter(c => !'0123456789abcdef'.includes(c)).length > 0){
-                throw new Error(tokenId);
-            }
-
-            await setState(this, {
-                creationPercentage: 100,
-                creationTokenId: tokenId,
-            });
-        } catch(err){
-            console.error(err);
-            await setState(this, {
-                creationError: err
-            });
-        }
-    };
+    renderStepThird() {
+        if (parseInt(this.state.step) == 3)
+        return (
+            <div>
+                <p>Sending Vote Tokens to XX Voter Addresses</p>
+                <Progress percent={45} />
+                <div>Success your tokesn were distributed in transction: xyz</div>
+                <a href='#' style={{color: 'unset', textDecoration: 'underline'}}>View this transaction on the blockchain</a>
+            </div>
+        )
+    }
 
     render(){
         return (
-            <div>
-                <Progress percent={this.state.uploadPercentage} success={this.state.uploadPercentage === 100} error={!!this.state.uploadError}>
-                    {this.state.uploadPercentage === 100 && 'File upload was successful'}
-                    {this.state.uploadPercentage === 100 && <br />}
-                    {this.state.uploadPercentage === 100 && this.state.uploadFileId}
-                    {this.state.uploadError && 'File upload failed: ' + String(this.state.uploadError)}
-                </Progress>
-                <Button disabled={!this.state.uploadError} onClick={this.uploadFile}>Retry file upload</Button>
-
-                <Divider />
-
-                <Progress percent={this.state.creationPercentage} success={this.state.creationPercentage === 100} error={!!this.state.creationError}>
-                    {this.state.creationPercentage === 100 && 'Token creation was successful'}
-                    {this.state.creationPercentage === 100 && <br />}
-                    {this.state.creationPercentage === 100 && this.state.creationTokenId}
-                    {this.state.creationError && 'Token creation failed: ' + String(this.state.creationError)}
-                </Progress>
-                <Button disabled={!this.state.creationError} onClick={this.createToken}>Retry token creation</Button>
+            <div className='airdrop-content'>
+                <p>Step 1: Send the Vote Tokens to distribute to simpleleger:qsfjsdknasdjsdfsdf</p>
+                <p>Waiting for you to send the tokens (o_o) ...</p>
+                <Container textAlign='right'>
+                    <Button onClick={this.handleChangeStep} id='2' basic color='black' content='Prentend Received Tokens'/>
+                </Container>
+                {this.renderStepSecond()}
+                {this.renderStepThird()}
             </div>
         );
     }

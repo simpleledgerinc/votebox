@@ -55,8 +55,6 @@ export default class AirdropCreate extends Component {
             onSubmit={this.handlePaymentReceived}
             tokenId={this.state.voteId}
             ballot={this.state.ballot} />
-        // <AirdropPayWidget
-        //     tokenId='01cda263914f1c3d51eb4c178959c82b8cb057f8f0c492dbc24da6d0f15cdebf' />
     );
 
     handlePaymentReceived = () => {
