@@ -1,0 +1,27 @@
+.container {
+    width: 100%!important;
+    display: block!important;
+}
+.table-container {
+    display: block!important;
+    margin-left: 0!important;
+}
+
+.newRow {
+    padding: 0!important;
+    display: flex;
+}
+
+.newRow .ui.input {
+    width: 100%;
+    margin-right: 50px;
+}
+
+.newRow Button {
+    min-width: 100px;
+}
+
+.csv-reader {
+    margin-top: 20px;
+    display: inline;
+}

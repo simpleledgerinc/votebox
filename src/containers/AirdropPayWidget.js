@@ -17,49 +17,23 @@ export default class AirdropPayWidget extends Component {
             tokenId: '',
             ballot: null,
             balances: [],
-            fetching: true,
-            fetchError: null,
             tableError: false
         }
+        this.handleTableError = this.handleTableError.bind(this)
     }
 
     componentDidMount() {
-        const { tokenId } = this.props
+        const { tokenId, ballot } = this.props
         this.setState({
-            tokenId
+            tokenId,
+            ballot
         })
-        this.loadToken(tokenId).catch(console.error)
     }
 
-    async loadToken(id) {
-        await this.setState({
-            ballot: null,
-            balances: [],
-            fetching: true,
-            fetchingError: null
-        });
-
-        try {
-            const ballot = await BitDB.getBallot(id);
-    
-            const balances = [];
-            for(let i = 0; i < ballot.getChoices().length; i++){
-                const addr = ballot.getAddress(i);
-                const balance = await Token.getBalance(id, addr);
-                balances.push(balance);
-            }
-
-            this.setState({
-                ballot,
-                balances,
-                fetching: false
-            })
-        } catch(err){
-            this.setState({
-                fetching: false,
-                fetchError: err,
-            })
-        }
+    handleTableError(tableError) {
+        this.setState({
+            tableError
+        })
     }
 
     renderTable() {
@@ -98,29 +72,18 @@ export default class AirdropPayWidget extends Component {
             </Table>
         );
     }
+
+    renderErrorMessage() {
+        if (!this.state.tableError) return null
+        return (
+            <div>
+                <Header style={{marginTop: '20px'}} as='h4' color='red'>Error: Vote Token Qunatity is less than distributionlist.</Header>
+            </div>
+        )
+    }
     
 
     render() {
-        if (this.state.fetching) {
-            return (
-                <Message icon>
-                    <Icon name='circle notched' loading />
-                    <Message.Content>
-                        <Message.Header>Just one second</Message.Header>
-                        Loading ballot information
-                    </Message.Content>
-                </Message>
-            );
-        }
-
-        if (this.state.fetchError) {
-            return (
-                <Message error>
-                    There was an error loading the ballot: {String(this.state.fetchError)}
-                </Message>
-            );
-        }
-
         const { ballot } = this.state;
         if(!ballot){
             return (
@@ -135,10 +98,8 @@ export default class AirdropPayWidget extends Component {
                 {this.renderTable()}
                 <Header size='small' style={{width: '100%'}}>Edit Distribution List</Header>
                 <br/>
-                <DistributionListTable id={this.state.tokenId}/>
-                <div style={{width: '100%', justifyContent: 'flex-end'}}>
-                    <Button disabled={this.state.tableError} style={{marginTop: '20px'}} color='green'>Proceed to Airdrop</Button>
-                </div>
+                <DistributionListTable onSubmit={() => {this.props.onSubmit()}} id={this.state.tokenId} voteTokenQuantity={ballot.getQuantity().toString(10)} handleTableErrorSubmit={this.handleTableError} />
+                {this.renderErrorMessage()}
             </div>
         );
     }

@@ -61,7 +61,7 @@ class AirdropElectionSelectionBody extends Component {
     };
 
     handleSubmit = () => {
-        this.props.onSubmit(this.state.tokenId);
+        this.props.onSubmit(this.state.tokenId, this.state.ballot);
     }
 
     componentDidMount(){

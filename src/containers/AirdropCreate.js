@@ -19,9 +19,10 @@ const STEP_LIST   = 0
 
 export default class AirdropCreate extends Component {
     state = {
-        step: STEP_LIST,
+        step: STEP_VOTE,
         holders: null, 
-        voteId: null
+        voteId: null,
+        ballot: null
     };
 
     renderStepList = () => (
@@ -41,16 +42,19 @@ export default class AirdropCreate extends Component {
             onSubmit={this.handleElectionSubmitted} />
     );
 
-    handleElectionSubmitted = (voteId) => {
+    handleElectionSubmitted = (voteId, ballot) => {
         this.setState({
             step: STEP_PAY, 
-            voteId
+            voteId,
+            ballot
         });
     }
 
     renderStepPay = () => (
         <AirdropPayWidget
-            tokenId={this.state.voteId} />
+            onSubmit={this.handlePaymentReceived}
+            tokenId={this.state.voteId}
+            ballot={this.state.ballot} />
         // <AirdropPayWidget
         //     tokenId='01cda263914f1c3d51eb4c178959c82b8cb057f8f0c492dbc24da6d0f15cdebf' />
     );
