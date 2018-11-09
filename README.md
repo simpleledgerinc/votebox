@@ -8,7 +8,7 @@
 | var    | Title of issue to vote on, 0-terminated    |
 | 1 byte | number of issue choices (up to 255)        |
 | var    | string array, 0-terminated                 |
-| int64  | end of voting time (local time zone?)      |
+| uint32 | end of voting time                         |
 
 ## Types of voting
 
