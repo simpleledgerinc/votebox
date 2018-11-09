@@ -23,7 +23,7 @@ class BadgerWallet {
     }
 
     static isLoggedIn(){
-        return !!this.getAddress();
+        return this.hasInstalled() && !!this.getAddress();
     }
 
     static getBalance(addr){
