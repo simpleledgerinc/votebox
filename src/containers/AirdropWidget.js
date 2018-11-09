@@ -5,7 +5,7 @@ import {
     Progress
 } from 'semantic-ui-react'
 import './components/AirdropWidget.css'
-
+import './App.css'
 
 export default class UploadWidget extends Component {
     constructor() {
@@ -16,7 +16,6 @@ export default class UploadWidget extends Component {
     }
 
     handleChangeStep = (e) => {
-        console.log(e.target.id)
         this.setState({
             step: e.target.id
         })
@@ -50,6 +49,7 @@ export default class UploadWidget extends Component {
     render(){
         return (
             <div className='airdrop-content'>
+                <a className='back-button' onClick={() => {this.props.handleBack(3)}}>Go Back</a>
                 <p>Step 1: Send the Vote Tokens to distribute to simpleleger:qsfjsdknasdjsdfsdf</p>
                 <p>Waiting for you to send the tokens (o_o) ...</p>
                 <Container textAlign='right'>

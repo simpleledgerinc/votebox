@@ -7,7 +7,11 @@ class BadgerWallet {
     }
 
     static getAddress(){
-        return badger.defaultAccount;
+        try {
+            return badger.defaultAccount;
+        } catch(_) {
+            return "";
+        }
     }
 
     static getSLPAddress(){

@@ -38,7 +38,8 @@ export default class AirdropCreate extends Component {
     };
 
     renderStepVote = () => (
-        <AirdropElectionSelection 
+        <AirdropElectionSelection
+            handleBack={this.returnToPrevious}
             onSubmit={this.handleElectionSubmitted} />
     );
 
@@ -52,6 +53,7 @@ export default class AirdropCreate extends Component {
 
     renderStepPay = () => (
         <AirdropPayWidget
+            handleBack={this.returnToPrevious}
             onSubmit={this.handlePaymentReceived}
             tokenId={this.state.voteId}
             ballot={this.state.ballot} />
@@ -65,8 +67,31 @@ export default class AirdropCreate extends Component {
 
     renderStepAirdrop = () => (
         <AirdropWidget
+            handleBack={this.returnToPrevious}
             ballot={this.state.ballot} />
     );
+
+    returnToPrevious = (step) => {
+        switch (step) {
+            case 1:
+                this.setState({
+                    step: STEP_LIST
+                })
+                break
+            case 2:
+                this.setState({
+                    step: STEP_VOTE
+                })
+                break
+            case 3:
+                this.setState({
+                    step: STEP_PAY
+                })
+                break
+            default:
+                break
+        }
+    }
 
     render = () => (
         <div>

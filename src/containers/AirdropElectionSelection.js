@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
-import { Icon, Input, Table, Message, Form, Button } from 'semantic-ui-react';
+import { Icon, Input, Table, Message, Form, Button, Container } from 'semantic-ui-react';
 import BitDB from '../lib/BitDB';
 import {utils} from 'slpjs';
 import BigNumber from 'bignumber.js';
 import setState from '../util/asyncSetState';
 import { Doughnut } from 'react-chartjs-2';
+import './App.css';
 
 import {
     Route,
@@ -15,68 +16,20 @@ import Token from '../lib/Token';
 class AirdropElectionSelection extends Component {
     state = {
         tokenId: '',
-        searching: false
-    }
-
-    handleSearch = () => {
-        // this.props.history.push('/airdrop/' + this.state.tokenId);
-        this.setState({
-            searching: true
-        })
-    };
-
-    handleChange = (e, { name, value }) => {
-        this.setState({
-            tokenId: value
-        });
-    };
-
-    render() {
-        if (this.state.searching) {
-            return (
-                <div>
-                    <Input style={{width: "470px"}} icon={<Icon name='search' inverted circular link onClick={this.handleSearch} />} placeholder='Enter token id' value={this.state.tokenId} onChange={this.handleChange} />
-                    <AirdropElectionSelectionBody onSubmit={this.props.onSubmit} id={this.state.tokenId}/>
-                </div>
-            );
-        } else {
-            return (
-                <div>
-                    <Input style={{width: "470px"}} icon={<Icon name='search' inverted circular link onClick={this.handleSearch} />} placeholder='Enter token id' value={this.state.tokenId} onChange={this.handleChange} />
-                </div>
-            )
-        }
-    }
-}
-
-export default withRouter(AirdropElectionSelection);
-
-class AirdropElectionSelectionBody extends Component {
-    state = {
+        isLoaded: false,
         ballot: null,
         fetching: true,
         fetchError: null,
-        balances: [],
-        tokenId: ''
-    };
-
-    handleSubmit = () => {
-        this.props.onSubmit(this.state.tokenId, this.state.ballot);
+        balances: []
     }
 
-    componentDidMount(){
-        const { id } = this.props;
+    handleSearch = () => {
         this.setState({
-            tokenId: id
+            isLoaded: true,
+            fetching: true
         })
-        this.loadBallot(id).catch(console.error);
-    }
-
-    componentWillUpdate(nextProps){
-        if(this.props.id !== nextProps.id){
-            this.loadBallot(nextProps.id).catch(console.error);
-        }
-    }
+        this.loadBallot(this.state.tokenId).catch(console.error);
+    };
 
     async loadBallot(id) {
         await setState(this, {
@@ -105,8 +58,19 @@ class AirdropElectionSelectionBody extends Component {
             await setState(this, {
                 fetching: false,
                 fetchError: err,
+                isLoaded: false
             });
         }
+    }
+
+    handleChange = (e, { name, value }) => {
+        this.setState({
+            tokenId: value
+        });
+    };
+
+    handleSubmit = () => {
+        this.props.onSubmit(this.state.tokenId, this.state.ballot);
     }
 
     renderTableChoice = (ballot) => (choice, i, list) => {
@@ -208,12 +172,13 @@ class AirdropElectionSelectionBody extends Component {
                     options={{
                         maintainAspectRatio: true
                     }} />
-                    <Button onClick={this.handleSubmit} id='create-submit' type='submit' color='green'>Submit</Button>
+                    <Button onClick={this.handleSubmit} id='create-submit' type='submit' color='green'>Distribute these vote tokens</Button>
             </div>
         );
     }
 
-    render(){
+    renderMain = () => {
+        if (!this.state.isLoaded && !this.state.fetchError) return null
         if (this.state.fetching) {
             return (
                 <Message icon>
@@ -250,4 +215,16 @@ class AirdropElectionSelectionBody extends Component {
             </div>
         );
     }
+
+    render() {
+        return (
+            <div>
+                <Input style={{width: "470px"}} icon={<Icon name='search' inverted circular link onClick={this.handleSearch} />} placeholder='Enter token id' value={this.state.tokenId} onChange={this.handleChange} />
+                <a className='back-button' onClick={() => {this.props.handleBack(1)}}>Go Back</a>
+                {this.renderMain()}
+            </div>
+        );
+    }
 }
+
+export default withRouter(AirdropElectionSelection);

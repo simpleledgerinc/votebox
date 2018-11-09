@@ -10,3 +10,11 @@
     width: 250px !important;
     margin-bottom: 16px;
 }
+
+.back-button {
+    float: right;
+    margin-top: 8px;
+    cursor: pointer;
+    font-size: 15px;
+    font-weight: bold
+}

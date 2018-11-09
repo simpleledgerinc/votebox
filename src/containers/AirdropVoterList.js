@@ -14,52 +14,17 @@ import Token from '../lib/Token';
 
 class AirdropVoterList extends Component {
     state = {
-        tokenId: ''
+        tokenId: '',
+        fetching: false,
+        fetchError: null,
+        holders: [],
+        isLoaded: false
     }
 
     handleSearch = () => {
-        this.props.history.push('/airdrop/' + this.state.tokenId);
+        this.setState({ fetching: true, isLoaded: true })
+        this.loadToken(this.state.tokenId).catch(console.error);        
     };
-
-    handleChange = (e, { name, value }) => {
-        this.setState({
-            tokenId: value
-        });
-    };
-
-    render() {
-        return (
-            <div>
-                <Input style={{width: "470px"}} icon={<Icon name='search' inverted circular link onClick={this.handleSearch} />} placeholder='Enter id for a token already held by the voters' value={this.state.tokenId} onChange={this.handleChange} />
-                <Route path="/airdrop/:id" component={() => <AirdropVoterListBody onSubmit={this.props.onSubmit} id={this.state.tokenId}/>} />
-            </div>
-        );
-    }
-}
-
-export default withRouter(AirdropVoterList);
-
-class AirdropVoterListBody extends Component {
-    state = {
-        fetching: true,
-        fetchError: null,
-        holders: [],
-    };
-
-    handleSubmit = () => {
-        this.props.onSubmit(this.state.holders);
-    }
-
-    componentDidMount(){
-        const { id } = this.props;
-        this.loadToken(id).catch(console.error);
-    }
-
-    componentWillUpdate(nextProps){
-        if(this.props.id !== nextProps.id){
-            this.loadToken(nextProps.id).catch(console.error);
-        }
-    }
 
     async loadToken(id) {
         await setState(this, {
@@ -81,15 +46,26 @@ class AirdropVoterListBody extends Component {
 
             await setState(this, {
                 fetching: false,
-                holders
+                holders,
             });
 
         } catch(err){
             await setState(this, {
                 fetching: false,
                 fetchError: err,
+                isLoaded: false
             });
         }
+    }
+
+    handleChange = (e, { name, value }) => {
+        this.setState({
+            tokenId: value,
+        });
+    };
+
+    handleSubmit = () => {
+        this.props.onSubmit(this.state.holders);
     }
 
     renderTableHolders = (item) => (holder, i, list) => {
@@ -136,7 +112,8 @@ class AirdropVoterListBody extends Component {
         );
     }
 
-    render(){
+    renderAirDropVoterList = () => {
+        if (!this.state.isLoaded && !this.state.fetchError) return null
         if (this.state.fetching) {
             return (
                 <Message icon>
@@ -173,4 +150,15 @@ class AirdropVoterListBody extends Component {
             </div>
         );
     }
+
+    render() {
+        return (
+            <div>
+                <Input style={{width: "470px"}} icon={<Icon name='search' inverted circular link onClick={this.handleSearch} />} placeholder='Enter id for a token already held by the voters' value={this.state.tokenId} onChange={this.handleChange} />
+                {this.renderAirDropVoterList()}
+            </div>
+        );
+    }
 }
+
+export default withRouter(AirdropVoterList);

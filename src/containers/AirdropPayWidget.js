@@ -1,14 +1,11 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 import {
-    Button,
     Table,
-    Icon,
     Message,
     Header
-} from 'semantic-ui-react';
-import BitDB from '../lib/BitDB';
-import Token from '../lib/Token';
+} from 'semantic-ui-react'
 import DistributionListTable from './components/DistributionListTable'
+import './App.css'
 
 export default class AirdropPayWidget extends Component {
     constructor() {
@@ -40,36 +37,39 @@ export default class AirdropPayWidget extends Component {
         const { ballot } = this.state;
 
         return (
-            <Table>
-                <Table.Body>
-                    <Table.Row>
-                        <Table.Cell>
-                            <strong>Vote Token ID:</strong>
-                        </Table.Cell>
-                        <Table.Cell>
-                            {this.state.tokenId}
-                        </Table.Cell>
-                    </Table.Row>
+            <div style={{display: 'block', width: '100%'}}>
+                <a className='back-button' style={{marginTop: 0, marginBottom: '10px'}} onClick={() => {this.props.handleBack(2)}}>Go Back</a>
+                <Table>
+                    <Table.Body>
+                        <Table.Row>
+                            <Table.Cell>
+                                <strong>Vote Token ID:</strong>
+                            </Table.Cell>
+                            <Table.Cell>
+                                {this.state.tokenId}
+                            </Table.Cell>
+                        </Table.Row>
 
-                    <Table.Row>
-                        <Table.Cell>
-                            <strong>Vote Token Name:</strong>
-                        </Table.Cell>
-                        <Table.Cell>
-                            {ballot.getTitle()}
-                        </Table.Cell>
-                    </Table.Row>
+                        <Table.Row>
+                            <Table.Cell>
+                                <strong>Vote Token Name:</strong>
+                            </Table.Cell>
+                            <Table.Cell>
+                                {ballot.getTitle()}
+                            </Table.Cell>
+                        </Table.Row>
 
-                    <Table.Row>
-                        <Table.Cell>
-                            <strong>Number of Vote Tokens to be distributed:</strong>
-                        </Table.Cell>
-                        <Table.Cell>
-                            {ballot.getQuantity().toString(10)}
-                        </Table.Cell>
-                    </Table.Row>
-                </Table.Body>
-            </Table>
+                        <Table.Row>
+                            <Table.Cell>
+                                <strong>Number of Vote Tokens to be distributed:</strong>
+                            </Table.Cell>
+                            <Table.Cell>
+                                {ballot.getQuantity().toString(10)}
+                            </Table.Cell>
+                        </Table.Row>
+                    </Table.Body>
+                </Table>
+            </div>
         );
     }
 
@@ -96,7 +96,9 @@ export default class AirdropPayWidget extends Component {
         return (
             <div className='PayWidget'>
                 {this.renderTable()}
-                <Header size='small' style={{width: '100%'}}>Edit Distribution List</Header>
+                <Header size='small' style={{width: '100%', display: 'block'}}>
+                    Edit Distribution List
+                </Header>
                 <br/>
                 <DistributionListTable onSubmit={() => {this.props.onSubmit()}} id={this.state.tokenId} voteTokenQuantity={ballot.getQuantity().toString(10)} handleTableErrorSubmit={this.handleTableError} />
                 {this.renderErrorMessage()}
