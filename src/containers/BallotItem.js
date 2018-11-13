@@ -7,6 +7,8 @@ import {
 } from 'semantic-ui-react';
 import bitdb from '../lib/BitDB';
 import setState from '../util/asyncSetState';
+import DocumentStorage from '../lib/DocumentStore';
+import Ballot from '../lib/Ballot';
 
 export default class BallotItem extends Component {
     static propTypes = {
@@ -36,7 +38,7 @@ export default class BallotItem extends Component {
             const ballot = await bitdb.getBallotInfo(fileId);
 
             await setState(this, {
-                ballot,
+                ballot: this.linkLocalDocument(ballot),
                 fetching: false
             });
         } catch(err){
@@ -46,6 +48,20 @@ export default class BallotItem extends Component {
             });
         }
     };
+
+    linkLocalDocument(ballot = null){
+        ballot = ballot || this.state.ballot;
+
+        const hash = ballot.getExternalDocument()
+        if(!hash)
+            return ballot;
+
+        const data = DocumentStorage.getDocument(hash);
+        const newBallot = Ballot.fromBuffer(data);
+        newBallot.setQuantity(this.state.ballot.getQuantity());
+
+        return newBallot();
+    }
 
     render(){
         const ballot     = this.state.ballot
@@ -71,6 +87,22 @@ export default class BallotItem extends Component {
                 <Table.Row>
                     <Table.Cell colSpan={3}>
                         <Loader active inline='centered' />
+                    </Table.Cell>
+                    <Table.Cell>
+                        {numOfCards}
+                    </Table.Cell>
+                </Table.Row>
+            );
+        }
+
+        if(this.state.ballot.getExternalDocument()){
+            return (
+                <Table.Row>
+                    <Table.Cell colSpan={3}>
+                        <Message error>
+                            <Message.Header>Ballot information is offchain. Please import the document in the 'Load offchain document' tab</Message.Header>
+                            Hash: {String(this.state.ballot.getExternalDocument())}
+                        </Message>
                     </Table.Cell>
                     <Table.Cell>
                         {numOfCards}

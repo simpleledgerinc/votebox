@@ -16,6 +16,8 @@ export default class Ballot {
     _end      = new Date(0);
     _receiver = '';
 
+    _externalDocHash = null;
+
     constructor(){
         this._token.setName('');
         this._token.setTicker('votebox.io');
@@ -160,6 +162,14 @@ export default class Ballot {
     estimateCost(){
         const file  = this.getBitcoinFile();
         return file.estimateCost() + this._token.estimateCost();
+    }
+
+    setExternalDocument(hash){
+        this._externalDocHash = hash;
+    }
+
+    getExternalDocument(){
+        return this._externalDocHash;
     }
 
     static fromBuffer(buffer){

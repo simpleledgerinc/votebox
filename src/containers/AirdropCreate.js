@@ -9,8 +9,8 @@ import Token from '../lib/Token';
 
 import AirdropVoterList from './AirdropVoterList';
 import AirdropElectionSelection from './AirdropElectionSelection';
-import AirdropPayWidget from './AirdropPayWidget';
-import AirdropWidget from './AirdropWidget';
+import AirdropPayWidget from '../components/AirdropPayWidget';
+import AirdropWidget from '../components/AirdropWidget';
 
 const STEP_LIST   = 0
     , STEP_VOTE   = 1

@@ -4,8 +4,7 @@ import {
     Message,
     Header
 } from 'semantic-ui-react'
-import DistributionListTable from './components/DistributionListTable'
-import './App.css'
+import DistributionListTable from './DistributionListTable';
 
 export default class AirdropPayWidget extends Component {
     constructor() {

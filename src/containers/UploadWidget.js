@@ -25,7 +25,11 @@ export default class UploadWidget extends Component {
     }
 
     componentDidMount(){
-        this.uploadFile();
+        if(this.props.ballot.getExternalDocument()){
+            this.createToken();
+        } else {
+            this.uploadFile();
+        }
     }
 
     uploadFile = async () => {
@@ -37,7 +41,7 @@ export default class UploadWidget extends Component {
             });
 
             const ballot = this.props.ballot
-            , file   = ballot.getBitcoinFile();
+             , file   = ballot.getBitcoinFile();
 
             const fileId = await BrowserWallet.uploadBitcoinFile(file, (percentage) => {
                 this.setState({
@@ -68,12 +72,20 @@ export default class UploadWidget extends Component {
                 creationTokenId: ''
             });
 
-            const ballot = this.props.ballot
-                , fileId = this.state.uploadFileId
-                , hash   = ballot.getBitcoinFile().getHash();
+            const ballot = this.props.ballot;
+            const fileId = this.state.uploadFileId;
+
+            let hash;
+            if(fileId){
+                hash = ballot.getBitcoinFile().getHash();
+            } else {
+                hash = ballot.getExternalDocument();
+            }
     
             const token = ballot.getToken();
-            token.setUrl(fileId);
+            if(fileId){
+                token.setUrl(fileId);
+            }
             token.setHash(hash);
 
             const tokenId = await BrowserWallet.createToken(token, ballot.getReceiver());
@@ -93,18 +105,24 @@ export default class UploadWidget extends Component {
         }
     };
 
+    renderFileUploadProgress = () => (
+        <div>
+            <Progress percent={this.state.uploadPercentage} success={this.state.uploadPercentage === 100} error={!!this.state.uploadError}>
+                {this.state.uploadPercentage === 100 && 'File upload was successful'}
+                {this.state.uploadPercentage === 100 && <br />}
+                {this.state.uploadPercentage === 100 && this.state.uploadFileId}
+                {this.state.uploadError && 'File upload failed: ' + String(this.state.uploadError)}
+            </Progress>
+            <Button disabled={!this.state.uploadError} onClick={this.uploadFile}>Retry file upload</Button>
+
+            <Divider />
+        </div>
+    );
+
     render(){
         return (
             <div>
-                <Progress percent={this.state.uploadPercentage} success={this.state.uploadPercentage === 100} error={!!this.state.uploadError}>
-                    {this.state.uploadPercentage === 100 && 'File upload was successful'}
-                    {this.state.uploadPercentage === 100 && <br />}
-                    {this.state.uploadPercentage === 100 && this.state.uploadFileId}
-                    {this.state.uploadError && 'File upload failed: ' + String(this.state.uploadError)}
-                </Progress>
-                <Button disabled={!this.state.uploadError} onClick={this.uploadFile}>Retry file upload</Button>
-
-                <Divider />
+                {!this.props.ballot.getExternalDocument() && this.renderFileUploadProgress()}
 
                 <Progress percent={this.state.creationPercentage} success={this.state.creationPercentage === 100} error={!!this.state.creationError}>
                     {this.state.creationPercentage === 100 && 'Token creation was successful'}

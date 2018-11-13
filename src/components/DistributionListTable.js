@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import ReactTable from 'react-table'
 import 'react-table/react-table.css'
-import BitDB from '../../lib/BitDB'
+import BitDB from '../lib/BitDB'
 import { Button, Icon, Input } from 'semantic-ui-react'
 import PropDataUpdatedCSVLink from './PropDataUpdatedCSVLink'
 import CSVReader from 'react-csv-reader'

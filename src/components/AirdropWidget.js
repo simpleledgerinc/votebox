@@ -4,8 +4,7 @@ import {
     Container,
     Progress
 } from 'semantic-ui-react'
-import './components/AirdropWidget.css'
-import './App.css'
+import './AirdropWidget.css';
 
 export default class UploadWidget extends Component {
     constructor() {

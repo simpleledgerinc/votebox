@@ -6,6 +6,9 @@ import Ballot from '../lib/Ballot';
 import BadgerWallet from '../lib/BadgerWallet';
 import { minQuantity, maxQuantity } from '../lib/Token';
 import bchaddr from 'bchaddrjs-slp';
+import bitbox from '../util/bitbox';
+import downloadBuffer from '../util/downloadBuffer';
+import DocumentStore from '../lib/DocumentStore';
 
 export default class CreateBallotForm extends Component {
     static propTypes = {
@@ -22,15 +25,25 @@ export default class CreateBallotForm extends Component {
         receiver: '',
         end: '',
         ballot: null,
+        offchain: true
     };
 
     handleSubmit = () => {
         const ballot = new Ballot();
+        ballot.setQuantity(this.state.cards);
+        ballot.setReceiver(this.state.receiver);
         ballot.setTitle(this.state.title);
         ballot.setChoices(this.state.choices);
         ballot.setEnd(new Date(this.state.end));
-        ballot.setQuantity(this.state.cards);
-        ballot.setReceiver(this.state.receiver);
+
+        if(this.state.offchain){
+            const buffer = ballot.getDocument();
+            const hash = bitbox.Crypto.sha256(buffer).toString('hex');
+            DocumentStore.setDocument(hash, buffer);
+            downloadBuffer(hash + '.ballot', buffer);
+            ballot.setExternalDocument(hash);
+        }
+
         this.props.onSubmit(ballot);
     }
 
@@ -80,6 +93,8 @@ export default class CreateBallotForm extends Component {
                 e.target.setCustomValidity('');
             }
             this.setState({ end: value });
+        } else if (name === 'offchain') {
+            this.setState({ offchain: value });
         }
     };
 
@@ -159,6 +174,14 @@ export default class CreateBallotForm extends Component {
                     <Form.Input required
                         name='end' type='datetime-local'
                         value={this.state.end}
+                        onChange={this.handleChange} />
+                </Form.Field>
+
+                <Form.Field>
+                    <label>Keep the ballot description offchain</label>
+                    <Form.Checkbox
+                        name='offchain'
+                        defaultChecked
                         onChange={this.handleChange} />
                 </Form.Field>
                 

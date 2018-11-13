@@ -50,6 +50,10 @@ export default class Token {
         this._hash = hash;
     }
 
+    getHash(){
+        return this._hash;
+    }
+
     setDecimals(decimals){
         if(typeof decimals !== 'number'){
             throw new Error('decimals must be a number');

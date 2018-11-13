@@ -15,6 +15,7 @@ import CreateBallot from './CreateBallot';
 import BallotFinder from './BallotFinder';
 import AirdropCreate from './AirdropCreate';
 import MyVotes from './MyVotes';
+import OffchainDocuments from './OffchainDocuments';
 import MenuItem from './MenuItem';
 
 import './App.css';
@@ -46,12 +47,16 @@ class App extends Component {
                         <MenuItem exact to='/airdrop'>
                             Distribute Vote Tokens
                         </MenuItem>
+                        <MenuItem exact to='/offchain'>
+                            Offchain Documents
+                        </MenuItem>
                     </Menu>
                     <Switch>
                         <Route exact path='/' component={CreateBallot} />
                         <Route path='/ballots' component={BallotFinder} />
                         <Route path='/votes' component={MyVotes} />
                         <Route path='/airdrop' component={AirdropCreate} />
+                        <Route path='/offchain' component={OffchainDocuments} />
                     </Switch>
                 </Segment>
             </Container>

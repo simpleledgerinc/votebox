@@ -65,7 +65,15 @@ class BitDB {
             return null;
         }
 
-        const ballot = await this.getBallotInfo(tx.out[0].s6.substring(12));
+        let ballot;
+        if(tx.out[0].s6.startsWith('bitcoinfile:')) {
+            ballot = await this.getBallotInfo(tx.out[0].s6.substring(12));
+        } else if(tx.out[0].s6.startsWith('file:')) {
+            ballot = new Ballot();
+            ballot.setExternalDocument(tx.out[0].s6.substring(5));
+        } else {
+            return null;
+        }
 
         ballot.setQuantity(new BigNumber(tx.out[0].b10, 16));
         
