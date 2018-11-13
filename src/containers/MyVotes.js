@@ -131,7 +131,7 @@ class MyVotesBody extends Component {
                     </Table.Row>
                     <Table.Row>
                         <Table.Cell>
-                            <strong>Your voter count</strong>
+                            <strong>Number of vote tokens held at this addres:</strong>
                         </Table.Cell>
                         <Table.Cell>
                             {cards.toString(10)}
