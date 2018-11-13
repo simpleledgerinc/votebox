@@ -8,19 +8,19 @@
   margin: 0 auto;
 }
 
-h5 {
+.footer h5 {
   color: #27a3e0!important;
   font-size: 18px!important;
   font-weight: bold;
   margin-bottom: 15px!important;
 }
 
-a {
+.footer a {
   color: #ffffff80!important;
   font-size: 14px;
 }
 
-img {
+.footer img {
   max-width: 200px;
 }
 
