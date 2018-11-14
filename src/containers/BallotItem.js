@@ -32,10 +32,8 @@ export default class BallotItem extends Component {
             fetchError: null
         });
 
-        const fileId = this.props.tx.out[0].s6.substr(12);
-
         try {
-            const ballot = await bitdb.getBallotInfo(fileId);
+            const ballot = await bitdb.getBallot(this.props.tx.tx.h);
 
             await setState(this, {
                 ballot: this.linkLocalDocument(ballot),

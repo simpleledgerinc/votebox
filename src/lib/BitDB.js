@@ -46,6 +46,7 @@ class BitDB {
         const res = await this._query({
             v: 2,
             e: {
+                'out.b7': 'hex',
                 'out.b10': 'hex'
             },
             q: {
@@ -68,11 +69,9 @@ class BitDB {
         let ballot;
         if(tx.out[0].s6.startsWith('bitcoinfile:')) {
             ballot = await this.getBallotInfo(tx.out[0].s6.substring(12));
-        } else if(tx.out[0].s6.startsWith('file:')) {
-            ballot = new Ballot();
-            ballot.setExternalDocument(tx.out[0].s6.substring(5));
         } else {
-            return null;
+            ballot = new Ballot();
+            ballot.setExternalDocument(tx.out[0].b7);
         }
 
         ballot.setQuantity(new BigNumber(tx.out[0].b10, 16));
