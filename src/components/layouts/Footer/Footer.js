@@ -33,6 +33,8 @@ const Footer = () => {
             <Link to='/'>Youtube</Link><br />
           </Col>
         </Row>
+        <hr />
+        <p>© 2018 <span>VoteBox.io</span>. All rights reserved.</p>
       </Container>
     </div>
   )

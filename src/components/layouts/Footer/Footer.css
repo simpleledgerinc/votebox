@@ -24,6 +24,23 @@
   max-width: 200px;
 }
 
+.footer hr {
+  width: 100%!important;
+  width: 2px;
+  background: #fff;
+}
+
+.footer p {
+  color: #ffffff80!important;
+  font-size: 15px;
+  text-align: center;
+}
+
+.footer p span {
+  color: #27a3e0!important;
+  font-weight: bold;
+}
+
 @media (max-width: 768px) { 
   .footer {
     text-align: center;

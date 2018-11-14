@@ -1,0 +1,53 @@
+.cast-container .search-section {
+  background-color: #60d5f6;
+  height: 120px;
+}
+
+.cast-container .search-section .container {
+  display: flex;
+  justify-content: space-between;
+}
+
+.cast-container .search-section input {
+  width: 70%;
+  height: 60px;
+  padding: 15px;
+  border: none;
+  outline: none;
+}
+
+.cast-container .search-section button {
+  width: 25%;
+  height: 60px;
+  background: #312f32;
+  border: none;
+  outline: none!important;
+  color: white;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.cast-container .choice-column span {
+  width: 100%;
+  display: block;
+  border: 1px solid lightgrey;
+  border-width: 0 0 1px;
+  padding: 6px 12px;
+}
+
+.cast-container .choice-column span:last-child {
+  border: none;
+}
+
+.cast-container .choice-column td:last-child {
+  padding: 0;
+}
+
+.cast-container table {
+  font-size: 15px;
+}
+
+.cast-container table th {
+  vertical-align: middle!important;
+  width: 20%;
+}
