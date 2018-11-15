@@ -9,10 +9,14 @@ import BITBOX from '../../../util/bitbox';
 import MoneyButton from '@moneybutton/react-money-button';
 import BrowserWallet from '../../../lib/BrowserWallet';
 import BadgerWallet from '../../../lib/BadgerWallet';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import './Pay.css';
 const refreshRate = 2000;
 
 export default class Pay extends Component {
+    constructor(props) {
+        super(props);
+    }
     static propTypes = {
         amount: PropTypes.number.isRequired,
         onReceivePayment: PropTypes.func.isRequired
@@ -20,7 +24,7 @@ export default class Pay extends Component {
 
     componentDidMount() {
         this._interval = window.setInterval(this.checkPayment, refreshRate);
-        // this.checkPayment();
+        this.checkPayment();
     }
 
     componentWillUnmount() {
@@ -31,8 +35,6 @@ export default class Pay extends Component {
         try {
             const amount = this.props.amount
                 , out = await BrowserWallet.findUTXO(amount);
-                console.log('out', out);
-                console.log('amount', amount);
             if (out) {
                 this._interval && window.clearInterval(this._interval);
                 this.props.onReceivePayment(out);
@@ -74,24 +76,30 @@ export default class Pay extends Component {
 
     render() {
         return (
+          <div>
+            <a onClick={() => this.props.goBack(0)} style={{float: 'left', fontWeight: 'bold', fontSize: '15px', cursor: 'pointer'}}>
+              <FontAwesomeIcon icon='long-arrow-alt-left' />
+              &nbsp;Back
+            </a>
             <div className='PayWidget'>
-                {this.renderMessage()}
+              {this.renderMessage()}
+              <div>
                 <div>
-                    <div>
-                        {this.renderQRCode()}
-                    </div>
-                    <div>
-                        <Button color='green' disabled={!BadgerWallet.hasInstalled()} onClick={this.handleBadger}>Pay with Badger</Button>
-                        <Button secondary onClick={this.handleWallet}>Pay with wallet software</Button>
-                        <MoneyButton
-                            to={BrowserWallet.getAddress()}
-                            amount={BITBOX.BitcoinCash.toBitcoinCash(this.props.amount).toString()}
-                            currency="BCH"
-                            onPayment={this.checkPayment}
-                            onError={this.handleMBError} />
-                    </div>
+                  {this.renderQRCode()}
                 </div>
+                <div>
+                  <Button color='green' disabled={!BadgerWallet.hasInstalled()} onClick={this.handleBadger}>Pay with Badger</Button>
+                  <Button secondary onClick={this.handleWallet}>Pay with wallet software</Button>
+                  <MoneyButton
+                    to={BrowserWallet.getAddress()}
+                    amount={BITBOX.BitcoinCash.toBitcoinCash(this.props.amount).toString()}
+                    currency="BCH"
+                    onPayment={this.checkPayment}
+                    onError={this.handleMBError} />
+                </div>
+              </div>
             </div>
+          </div>
         );
     }
 }

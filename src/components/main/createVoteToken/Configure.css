@@ -45,3 +45,8 @@
 .configure .form-group {
   margin-bottom: 0;
 }
+
+.configure label {
+  font-weight: bold;
+  font-size: 14px;
+}

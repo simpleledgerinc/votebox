@@ -9,9 +9,9 @@ import { CastMyVotes } from './components/main/castMyVotes/CastMyVotes';
 import FindVotingResults from './components/main/findVotingResults/FindVotingResults';
 
 import { library } from '@fortawesome/fontawesome-svg-core';
-import { faHome } from '@fortawesome/free-solid-svg-icons';
+import { faHome, faLongArrowAltLeft } from '@fortawesome/free-solid-svg-icons';
 
-library.add(faHome)
+library.add(faHome, faLongArrowAltLeft)
 
 class App extends Component {
   render() {

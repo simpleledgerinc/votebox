@@ -21,7 +21,6 @@ export class CreateVoteToken extends Component {
   }
 
   handleConfigureSubmit = (ballot) => {
-    console.log(ballot.estimateCost())
     this.setState({
       step: STEP_PAY,
       ballot
@@ -34,12 +33,19 @@ export class CreateVoteToken extends Component {
     })
   }
 
+  handleBack = (step) => {
+    if (step == STEP_CONFIGURE)
+      this.setState({ step: STEP_CONFIGURE})
+    if (step === STEP_PAY)
+      this.setState({ step: STEP_PAY })
+  }
+
   renderBody = () => {
     switch (this.state.step) {
       case STEP_CONFIGURE:
        return <Configure onSubmit={this.handleConfigureSubmit}/>
       case STEP_PAY:
-       return <Pay amount={this.state.ballot.estimateCost()} onReceivePayment={this.handlePaySubmit}/>
+       return <Pay amount={this.state.ballot.estimateCost()} onReceivePayment={this.handlePaySubmit} goBack={this.handleBack}/>
       case STEP_PUBLISH:
        return <Publish ballot={this.state.ballot}/>
     }
