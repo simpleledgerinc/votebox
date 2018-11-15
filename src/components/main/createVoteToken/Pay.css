@@ -1,0 +1,31 @@
+.PayWidget {
+  padding: 24px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.PayWidget > .message {
+  display: inline-block;
+  text-align: center;
+}
+
+.PayWidget > div {
+  display: flex;
+  flex-direction: row;
+}
+
+.PayWidget > div > div:nth-child(1) {
+  padding: 32px 0;
+}
+
+.PayWidget > div > div:nth-child(2) {
+  margin-left: 18px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  box-sizing: border-box;
+  padding: 18px 0;
+}

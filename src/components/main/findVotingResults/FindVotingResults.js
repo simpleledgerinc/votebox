@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Container, Table } from 'reactstrap';
+import { Container, Table, Alert } from 'reactstrap';
 import { ClipLoader } from 'react-spinners';
 import BitDB from '../../../lib/BitDB';
 import BigNumber from 'bignumber.js';
@@ -95,6 +95,7 @@ export default class FindVotingResults extends Component {
       );
   }
   renderTable = () => {
+    console.log('asdfasdf')
     const ballot = this.state.ballot;
 
     return (
@@ -140,25 +141,30 @@ export default class FindVotingResults extends Component {
       </Container>
     )
   }
-  beforeRender = () => {
+  renderBody = () => {
     if (this.state.fetching)
       return (
-        <Container className='text-center'>
-          <div className='sweet-loading'>
-            <ClipLoader
-              sizeUnit={"px"}
-              size={80}
-              color={'#123abc'}
-              loading={this.state.fetching}
-            />
-          </div>
-        </Container>
+        <div className='sweet-loading'>
+          <ClipLoader
+            sizeUnit={"px"}
+            size={80}
+            color={'#123abc'}
+            loading={this.state.fetching}
+          />
+        </div>
       )
     if (this.state.isLoaded && this.state.fetchError)
-      return (<Container className='text-center'>Error</Container>)
+      return (
+        <Alert color='danger'>There was an error loading the ballot. {String(this.state.fetchError)}</Alert>
+      )
     if (this.state.isLoaded && !this.state.ballot) {
-      return (<Container className='text-center'>Ballot not found</Container>)
+      return (<Alert color='danger'>Ballot not found.</Alert>)
     }
+    return (
+      <div className='text-left'>
+        { this.state.isLoaded && this.renderTable() }
+      </div>
+    )
   }
 
   render() {
@@ -170,9 +176,9 @@ export default class FindVotingResults extends Component {
             <button onClick={this.handleSearch}>SEARCH</button>
           </Container>
         </section>
-        { this.beforeRender() }
-        { this.state.isLoaded && !this.state.fetchError && this.renderTable() }
-        { this.state.isLoaded && !this.state.fetchError && this.renderChart() }
+        <Container className='text-center'>
+          { this.renderBody() }
+        </Container>
       </div>
     )
   }

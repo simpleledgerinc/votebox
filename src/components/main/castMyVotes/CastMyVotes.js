@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Container, Table } from 'reactstrap';
+import { Container, Table, Alert } from 'reactstrap';
 import { ClipLoader } from 'react-spinners';
 import './CastMyVotes.css';
 import Ballot from '../../../lib/Ballot';
@@ -93,24 +93,25 @@ export class CastMyVotes extends Component {
       </Container>
     )
   }
-  beforeRender = () => {
+  renderBody = () => {
     if (this.state.fetching)
       return (
-        <Container className='text-center'>
-          <div className='sweet-loading'>
-            <ClipLoader
-              sizeUnit={"px"}
-              size={80}
-              color={'#123abc'}
-              loading={this.state.fetching}
-            />
-          </div>
-        </Container>
+        <div className='sweet-loading'>
+          <ClipLoader
+            sizeUnit={"px"}
+            size={80}
+            color={'#123abc'}
+            loading={this.state.fetching}
+          />
+        </div>
       )
     if (this.state.isLoaded && this.state.fetchError)
-      return (<Container className='text-center'>Error</Container>)
+      return (
+        <Alert color='danger'>There was an error loading the ballot. {String(this.state.fetchError)}</Alert>
+      )
     if (this.state.isLoaded && this.state.ballots.length === 0)
-      return (<Container className='text-center'>No Vote tokens on this address</Container>)
+      return (<Alert color='danger'>No Vote tokens on this address</Alert>)
+    return (this.state.ballots.map(this.renderTable))
   }
 
   render() {
@@ -122,8 +123,9 @@ export class CastMyVotes extends Component {
             <button onClick={this.handleSearch}>SEARCH</button>
           </Container>
         </section>
-        { this.beforeRender() }
-        { this.state.isLoaded && !this.state.fetchError && this.state.ballots.map(this.renderTable) }
+        <Container className='text-center'>
+          { this.renderBody() }
+        </Container>
       </div>
     )
   }
