@@ -1,22 +1,15 @@
 import React, { Component } from 'react';
-import {
-    Button,
-    Message
-} from 'semantic-ui-react';
+import { Message } from 'semantic-ui-react';
 import PropTypes from 'prop-types';
 import QRCode from 'qrcode.react';
 import BITBOX from '../../../util/bitbox';
 import MoneyButton from '@moneybutton/react-money-button';
 import BrowserWallet from '../../../lib/BrowserWallet';
 import BadgerWallet from '../../../lib/BadgerWallet';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import './Pay.css';
 const refreshRate = 2000;
 
 export default class Pay extends Component {
-    constructor(props) {
-        super(props);
-    }
     static propTypes = {
         amount: PropTypes.number.isRequired,
         onReceivePayment: PropTypes.func.isRequired
@@ -77,10 +70,6 @@ export default class Pay extends Component {
     render() {
         return (
           <div>
-            <a onClick={() => this.props.goBack(0)} style={{float: 'left', fontWeight: 'bold', fontSize: '15px', cursor: 'pointer'}}>
-              <FontAwesomeIcon icon='long-arrow-alt-left' />
-              &nbsp;Back
-            </a>
             <div className='PayWidget'>
               {this.renderMessage()}
               <div>
@@ -88,8 +77,8 @@ export default class Pay extends Component {
                   {this.renderQRCode()}
                 </div>
                 <div>
-                  <Button color='green' disabled={!BadgerWallet.hasInstalled()} onClick={this.handleBadger}>Pay with Badger</Button>
-                  <Button secondary onClick={this.handleWallet}>Pay with wallet software</Button>
+                  <button className='badger-button' disabled={!BadgerWallet.hasInstalled()} onClick={this.handleBadger}>Pay with Badger</button>
+                  <button className='wallet-button' onClick={this.handleWallet}>Pay with wallet software</button>
                   <MoneyButton
                     to={BrowserWallet.getAddress()}
                     amount={BITBOX.BitcoinCash.toBitcoinCash(this.props.amount).toString()}

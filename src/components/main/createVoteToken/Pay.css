@@ -23,10 +23,39 @@
 
 .PayWidget > div > div:nth-child(2) {
   margin-left: 18px;
+  margin-top: 30px;
   display: flex;
   flex-direction: column;
   justify-content: space-around;
   align-items: center;
   box-sizing: border-box;
-  padding: 18px 0;
+}
+
+.PayWidget button {
+  min-width: 230px;
+  border-radius: 0;
+  color: white;
+  font-size: 14px;
+  font-weight: bold;
+  padding: 12px 30px;
+  margin-bottom: 15px;
+  outline: none;
+  border: none;
+  cursor: pointer;
+}
+
+.PayWidget button:focus {
+  outline: none;
+}
+
+.PayWidget .badger-button {
+  background: #4bb8e6;
+}
+
+.PayWidget .wallet-button {
+  background: #000;
+}
+
+.PayWidget .ui.message {
+  border-radius: 0;
 }

@@ -13,9 +13,9 @@
   .btn-arrow-left:after {
     content: "";
     position: absolute;
-    top: 9px;
-    height: 46px;
-    width: 46px;
+    top: 8px;
+    height: 42px;
+    width: 42px;
     background: inherit;
     border: inherit;
     border-left-color: transparent;
@@ -23,10 +23,10 @@
     border-radius: 0 !important; }
   .btn-arrow-right:before,
   .btn-arrow-left:before {
-    left: -24px; }
+    left: -22px; }
   .btn-arrow-right:after,
   .btn-arrow-left:after {
-    right: -24px; }
+    right: -22px; }
   .btn-arrow-right.btn-arrow-left,
   .btn-arrow-left.btn-arrow-left {
     padding-right: 36px; }

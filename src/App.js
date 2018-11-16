@@ -7,11 +7,12 @@ import Footer from './components/layouts/Footer/Footer';
 import { CreateVoteToken } from './components/main/createVoteToken/CreateVoteToken';
 import { CastMyVotes } from './components/main/castMyVotes/CastMyVotes';
 import FindVotingResults from './components/main/findVotingResults/FindVotingResults';
+import { DistributeVoteToken } from './components/main/distributeTokens/DistributeVoteToken';
 
 import { library } from '@fortawesome/fontawesome-svg-core';
-import { faHome, faLongArrowAltLeft } from '@fortawesome/free-solid-svg-icons';
+import { faHome, faLongArrowAltLeft, faAngleDoubleLeft } from '@fortawesome/free-solid-svg-icons';
 
-library.add(faHome, faLongArrowAltLeft)
+library.add(faHome, faLongArrowAltLeft, faAngleDoubleLeft)
 
 class App extends Component {
   render() {
@@ -25,7 +26,7 @@ class App extends Component {
                 <Route path='/create-vote-token' component={ CreateVoteToken } />
                 <Route path='/cast-vote' component={ CastMyVotes } />
                 <Route path='/find-vote' component={ FindVotingResults } />
-                <Route path='/distripute' component={ Home } />
+                <Route path='/distribute' component={ DistributeVoteToken } />
               </Switch>
             </div>
             <Footer />

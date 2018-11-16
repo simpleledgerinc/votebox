@@ -5,6 +5,7 @@ import BitDB from '../../../lib/BitDB';
 import BigNumber from 'bignumber.js';
 import { Doughnut } from 'react-chartjs-2';
 import Token from '../../../lib/Token';
+import Breadcrumb from '../../layouts/BreadCrumb';
 import './FindVotingResults.css';
 
 export default class FindVotingResults extends Component {
@@ -95,7 +96,6 @@ export default class FindVotingResults extends Component {
       );
   }
   renderTable = () => {
-    console.log('asdfasdf')
     const ballot = this.state.ballot;
 
     return (
@@ -162,7 +162,7 @@ export default class FindVotingResults extends Component {
     }
     return (
       <div className='text-left'>
-        { this.state.isLoaded && this.renderTable() }
+        { this.state.isLoaded && !this.state.fetchError && this.renderTable() }
       </div>
     )
   }
@@ -170,6 +170,9 @@ export default class FindVotingResults extends Component {
   render() {
     return (
       <div className='find-container'>
+        <Container>
+          <Breadcrumb crumb='Find Voting Results' />
+        </Container>
         <section className='search-section text-center'>
           <Container>
             <input onChange={this.handleChange} type='text' placeholder='Enter Token Id' />

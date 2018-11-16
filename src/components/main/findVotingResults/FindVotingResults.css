@@ -1,22 +1,24 @@
-.find-container .search-section {
+.search-section {
   background-color: #60d5f6;
-  height: 120px;
+  height: 100px;
+  margin-top: 30px;
 }
 
-.find-container .search-section .container {
+.search-section .container {
   display: flex;
   justify-content: space-between;
 }
 
-.find-container .search-section input {
+.search-section input {
   width: 70%;
   height: 60px;
   padding: 15px;
   border: none;
   outline: none;
+  font-size: 16px;
 }
 
-.find-container .search-section button {
+.search-section button {
   width: 25%;
   height: 60px;
   background: #312f32;

@@ -6,26 +6,23 @@
   max-width: 1170px!important;
 }
 
-.create-vote-token button {
+.create-vote-token.container .btn {
   background: #ececec;
   color: #322f31;
   outline: none!important;
   border-radius: 0;
   font-size: 16px;
   font-weight: bold;
-  padding: 20px 0;
+  padding: 18px 0;
   margin-right: 10px;
   width: 31%;
   cursor: unset!important;
+  height: 60px;
 }
 
-.create-vote-token button.active {
-  background: #b2b2b2;
+.create-vote-token .btn.active {
+  background: #777777;
   color: white;
-}
-
-.create-vote-token button:focus {
-  box-shadow: none!important;
 }
 
 .create-vote-token .configure:before {
@@ -36,10 +33,14 @@
   background: unset!important;
 }
 
-.new-token-container hr {
-  margin-top: 0;
-  margin-bottom: 8px;
-  background: #61d5f6;
-  height: 8px;
+.previous-button {
+  float: right;
+  background: #24a5dc;
+  color: white;
+  font-weight: bold;
+  font-size: 14px;
+  padding: 8px 15px;
+  margin-top: -5px;
   border: none;
+  cursor: pointer;
 }

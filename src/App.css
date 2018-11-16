@@ -7,3 +7,21 @@
 .cl-black { color: #000 }
 
 .f_15 { font-size: 15px }
+
+.progress,.progress .bar {
+  border-radius: 0!important;
+}
+
+.container .ui.progress.success .bar {
+  background: #24a5dc!important
+}
+
+button {
+  border-radius: 0!important;
+  outline: none;
+  cursor: pointer!important;
+}
+
+button:focus {
+  outline: none!important;
+}

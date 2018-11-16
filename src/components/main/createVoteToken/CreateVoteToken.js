@@ -3,8 +3,10 @@ import { Container } from 'reactstrap';
 import Configure from './Configure';
 import Pay from './Pay';
 import Publish from './Publish';
+import BreadCrumb from '../../layouts/BreadCrumb';
 import './CreateVoteToken.css';
 import './directional-buttons.css';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const STEP_CONFIGURE = 0
     , STEP_PAY = 1
@@ -33,34 +35,56 @@ export class CreateVoteToken extends Component {
     })
   }
 
-  handleBack = (step) => {
-    if (step == STEP_CONFIGURE)
-      this.setState({ step: STEP_CONFIGURE})
-    if (step === STEP_PAY)
-      this.setState({ step: STEP_PAY })
+  handleGoBack = () => {
+    if (this.state.step === STEP_PAY) {
+      this.setState({
+        step: STEP_CONFIGURE
+      })
+    } else if (this.state.step === STEP_PUBLISH) {
+      this.setState({
+        step: STEP_PAY
+      })
+    }
   }
 
   renderBody = () => {
     switch (this.state.step) {
-      case STEP_CONFIGURE:
-       return <Configure onSubmit={this.handleConfigureSubmit}/>
       case STEP_PAY:
-       return <Pay amount={this.state.ballot.estimateCost()} onReceivePayment={this.handlePaySubmit} goBack={this.handleBack}/>
+       return <Pay amount={this.state.ballot.estimateCost()} onReceivePayment={this.handlePaySubmit}/>
       case STEP_PUBLISH:
        return <Publish ballot={this.state.ballot}/>
+      default:
+        return <Configure onSubmit={this.handleConfigureSubmit}/>
     }
   }
 
   render() {
     return (
-      <div className='new-token-container'>
-        <hr />
-        <Container className='create-vote-token' style={{textAlign: 'center'}}>
-          <button className={'btn configure btn-arrow-right ' + (this.state.step === STEP_CONFIGURE ? 'active' : '')}>Configure</button>
-          <button className={'btn pay btn-arrow-right ' + (this.state.step === STEP_PAY ? 'active' : '')}>Pay</button>
-          <button className={'btn publish btn-arrow-right ' + (this.state.step === STEP_PUBLISH ? 'active' : '')}>Publish</button>
+      <div>
+        <Container>
+          <BreadCrumb crumb='Create New Vote Token' />
+          { this.state.step === STEP_CONFIGURE ? null :
+            <button onClick={this.handleGoBack} className='previous-button'>
+              <FontAwesomeIcon icon='angle-double-left' />&nbsp;
+              Previous
+            </button>
+          }
         </Container>
-        <Container style={{padding: '30px 40px'}}>
+        <Container className='create-vote-token text-center'>
+          <button className={'btn configure btn-arrow-right ' + (this.state.step === STEP_CONFIGURE ? 'active' : '')}>
+            <img width='25px' src={`/assets/img/configure${this.state.step === STEP_CONFIGURE ? '_active' : ''}.png`} />
+            &nbsp;Configure
+          </button>
+          <button className={'btn pay btn-arrow-right ' + (this.state.step === STEP_PAY ? 'active' : '')}>
+            <img width='25px' src={`/assets/img/pay${this.state.step === STEP_PAY ? '_active' : ''}.png`} />
+            &nbsp;Pay
+          </button>
+          <button className={'btn publish btn-arrow-right ' + (this.state.step === STEP_PUBLISH ? 'active' : '')}>
+            <img width='25px' src={`/assets/img/publish${this.state.step === STEP_PUBLISH ? '_active' : ''}.png`} />
+            &nbsp;Publish  
+          </button>
+        </Container>
+        <Container style={{padding: '30px'}}>
           { this.renderBody() }
         </Container>
       </div>

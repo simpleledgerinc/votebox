@@ -4,6 +4,7 @@ import { ClipLoader } from 'react-spinners';
 import './CastMyVotes.css';
 import Ballot from '../../../lib/Ballot';
 import BadgerWallet from '../../../lib/BadgerWallet';
+import Breadcrumb from '../../layouts/BreadCrumb';
 
 export class CastMyVotes extends Component {
   constructor(props) {
@@ -117,6 +118,9 @@ export class CastMyVotes extends Component {
   render() {
     return (
       <div className='cast-container'>
+        <Container>
+          <Breadcrumb crumb='Cast My Votes' />
+        </Container>
         <section className='search-section text-center'>
           <Container>
             <input onChange={this.handleChange} type='text' placeholder='Enter a simpleledger address holding your voting tokens' />

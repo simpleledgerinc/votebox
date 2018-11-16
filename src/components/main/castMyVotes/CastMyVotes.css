@@ -1,6 +1,7 @@
 .cast-container .search-section {
   background-color: #60d5f6;
-  height: 120px;
+  height: 100px;
+  margin-top: 30px;
 }
 
 .cast-container .search-section .container {
