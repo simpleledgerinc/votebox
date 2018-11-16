@@ -51,7 +51,7 @@ export default class OffchainDocuments extends Component {
                     })
                     .then(buf => {
                         const hash = BITBOX.Crypto.sha256(buf).toString('hex');
-                        DocumentStore.setDocument('file:' + hash, buf);
+                        DocumentStore.setDocument(hash, buf);
                         this.loadBallots();
                     })
                     .catch(window.alert)

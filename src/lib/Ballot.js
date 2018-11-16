@@ -24,7 +24,7 @@ export default class Ballot {
         this._token.setDecimals(0);
         
         // Placeholder values
-        this._token.setUrl('bitcoinfile:0000000000000000000000000000000000000000000000000000000000000000');
+        // this._token.setUrl('bitcoinfile:0000000000000000000000000000000000000000000000000000000000000000');
         this._token.setHash('0000000000000000000000000000000000000000000000000000000000000000');
     }
 
