@@ -28,13 +28,13 @@ const AboutUs = () => {
           </Col>
         </Row>
       </CContainer>
-        <section style={{backgroundColor: '#60d5f6'}}>
-          <Container style={{padding: '80px 0', maxWidth: '900px', margin: '0 auto', textAlign: 'center'}}>
-            <h2>What People Says</h2>
-            <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Necessitatibus nam saepe repudiandae nobis, magni eum qui vel eveniet sunt laudantium blanditiis, explicabo fugiat.</p>
-            <h6>Albert Hall, USA</h6>
-          </Container>
-        </section>
+      <section style={{backgroundColor: '#60d5f6'}}>
+        <Container style={{padding: '80px 0', maxWidth: '900px', margin: '0 auto', textAlign: 'center'}}>
+          <h2>What People Says</h2>
+          <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Necessitatibus nam saepe repudiandae nobis, magni eum qui vel eveniet sunt laudantium blanditiis, explicabo fugiat.</p>
+          <h6><b>Albert Hall, USA</b></h6>
+        </Container>
+      </section>
     </div>
   )
 }
