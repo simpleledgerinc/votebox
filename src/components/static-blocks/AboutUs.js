@@ -11,7 +11,7 @@ const AboutUs = () => {
         <BreadCrumb crumb='About Vote'/>
         <h1>ABOUT US</h1>
         <Row>
-          <Col md='8'>
+          <Col md='7' className='mr-5'>
             <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Necessitatibus nam saepe repudiandae nobis, magni eum qui vel eveniet sunt laudantium blanditiis, explicabo fugiat. Vitae voluptas omnis totam modi ipsum harum. Lorem ipsum dolor sit amet consectetur, adipisicing elit. Magni itaque eveniet quas minus soluta tenetur hic quisquam nihil iusto, deleniti saepe officia facere vitae quam! Veritatis quaerat doloremque consectetur in?. Lorem ipsum dolor sit amet consectetur, adipisicing elit. Omnis, ipsa officiis tempora eaque, adipisci a eum odio fuga ratione vitae nemo voluptatem illum est similique voluptate, facilis reiciendis libero! Lorem ipsum dolor, sit amet consectetur adipisicing elit. Necessitatibus nam saepe repudiandae nobis, magni eum qui vel eveniet sunt laudantium blanditiis, explicabo fugiat. Vitae voluptas omnis totam modi ipsum harum. Lorem ipsum dolor sit amet consectetur, adipisicing elit. Magni itaque eveniet quas minus soluta tenetur hic quisquam nihil iusto, deleniti saepe officia facere vitae quam! Veritatis quaerat doloremque consectetur in?. Lorem ipsum dolor sit amet consectetur, adipisicing elit. Omnis, ipsa officiis tempora eaque, adipisci a eum odio fuga ratione vitae nemo voluptatem illum est similique voluptate, facilis reiciendis libero! Nulla! Lorem ipsum dolor sit amet consectetur, adipisicing elit. Omnis, ipsa officiis tempora eaque, adipisci a eum odio fuga ratione vitae nemo voluptatem illum est similique voluptate, facilis reiciendis libero! Nulla!</p>
           </Col>
           <Col md='4'>
@@ -23,7 +23,7 @@ const AboutUs = () => {
             <Image src='assets/img/about-img-2.png' />
             <Image src='assets/img/about-img-3.png' />
           </Col>
-          <Col md='8'>
+          <Col md='7' className='ml-5'>
             <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Necessitatibus nam saepe repudiandae nobis, magni eum qui vel eveniet sunt laudantium blanditiis, explicabo fugiat. Vitae voluptas omnis totam modi ipsum harum. Lorem ipsum dolor sit amet consectetur, adipisicing elit. Magni itaque eveniet quas minus soluta tenetur hic quisquam nihil iusto, deleniti saepe officia facere vitae quam! Veritatis quaerat doloremque consectetur in?. Lorem ipsum dolor sit amet consectetur, adipisicing elit. Omnis, ipsa officiis tempora eaque, adipisci a eum odio fuga ratione vitae nemo voluptatem illum est similique voluptate, facilis reiciendis libero! Lorem ipsum dolor, sit amet consectetur adipisicing elit. Necessitatibus nam saepe repudiandae nobis, magni eum qui vel eveniet sunt laudantium blanditiis, explicabo fugiat. Vitae voluptas omnis totam modi ipsum harum. Lorem ipsum dolor sit amet consectetur, adipisicing elit. Magni itaque eveniet quas minus soluta tenetur hic quisquam nihil iusto, deleniti saepe officia facere vitae quam! Veritatis quaerat doloremque consectetur in?. Lorem ipsum dolor sit amet consectetur, adipisicing elit. Omnis, ipsa officiis tempora eaque, adipisci a eum odio fuga ratione vitae nemo voluptatem illum est similique voluptate, facilis reiciendis libero! Nulla! Lorem ipsum dolor sit amet consectetur, adipisicing elit. Omnis, ipsa officiis tempora eaque, adipisci a eum odio fuga ratione vitae nemo voluptatem illum est similique voluptate, facilis reiciendis libero! Nulla!</p>
           </Col>
         </Row>
