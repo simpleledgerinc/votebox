@@ -13,7 +13,7 @@ const Footer = () => {
           </Col>
           <Col md='3' sm='12'>
             <h5>Know More</h5>
-            <Link to='/'>About Vote</Link><br />
+            <Link to='/about'>About Vote</Link><br />
             <Link to='/'>Contact Us</Link><br />
             <Link to='/'>Policies</Link><br />
             <Link to='/'>Help Center</Link><br />
@@ -34,7 +34,7 @@ const Footer = () => {
           </Col>
         </Row>
         <hr />
-        <p>© 2018 <span>VoteBox.io</span>. All rights reserved.</p>
+        <p>© {new Date().getFullYear()}&nbsp; <span>VoteBox.io</span>. All rights reserved.</p>
       </Container>
     </div>
   )

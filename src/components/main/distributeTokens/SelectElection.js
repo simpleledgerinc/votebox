@@ -1,14 +1,14 @@
 import React, { Component } from 'react';
+import styled from 'styled-components';
 import { Container, Table, Alert } from 'reactstrap';
 import { ClipLoader } from 'react-spinners';
 import BitDB from '../../../lib/BitDB';
 import BigNumber from 'bignumber.js';
 import { Doughnut } from 'react-chartjs-2';
 import Token from '../../../lib/Token';
-import Breadcrumb from '../../layouts/BreadCrumb';
-import './FindVotingResults.css';
+import '../findVotingResults/FindVotingResults.css';
 
-export default class FindVotingResults extends Component {
+export default class SelectElection extends Component {
   constructor(props) {
     super(props)
 
@@ -32,68 +32,75 @@ export default class FindVotingResults extends Component {
     this.loadBallots(this.state.tokenId).catch(console.error);
   }
 
-  async loadBallots(id){
-      this.setState({
-        ballot: null,
-        fetching: true,
-        fetchError: null,
-        balances: []
-      });
-      try {
-          const ballot = await BitDB.getBallot(id);
-          const balances = [];
-          for(let i = 0; i < ballot.getChoices().length; i++){
-              const addr = ballot.getAddress(i);
-              const balance = await Token.getBalance(id, addr);
-              balances.push(balance);
-          }
-          this.setState({
-              fetching: false,
-              ballot,
-              balances,
-              isLoaded: true
-          });
-      } catch(err){
-          this.setState({
-              fetching: false,
-              fetchError: err,
-              isLoaded: true
-          });
-      }
+  handleSubmit = () => {
+    this.props.onSubmit(this.state.tokenId, this.state.ballot);
   }
 
-  renderChart(){
-      const labels = this.state.ballot.getChoices().map((choice, i) => `Choice #${i + 1}`)
-          , sum    = this.state.balances.reduce((sum, cur) => sum.plus(cur), new BigNumber(0));
-
-      let data = [];
-      for(let i = 0; i < this.state.balances.length; i++){
-          let percent;
-          if(sum.isZero()){
-              percent = 1 / labels.length;
-          } else {
-              percent = this.state.balances[i].dividedBy(sum).toNumber();
-          }
-          data.push(percent * 100);
+  async loadBallots(id){
+    this.setState({
+      ballot: null,
+      fetching: true,
+      fetchError: null,
+      balances: []
+    });
+    try {
+      const ballot = await BitDB.getBallot(id);
+      const balances = [];
+      for(let i = 0; i < ballot.getChoices().length; i++){
+        const addr = ballot.getAddress(i);
+        const balance = await Token.getBalance(id, addr);
+        balances.push(balance);
       }
+      this.setState({
+        fetching: false,
+        ballot,
+        balances,
+        isLoaded: true
+      });
+    } catch(err){
+      this.setState({
+        fetching: false,
+        fetchError: err,
+        isLoaded: true
+      });
+    }
+  }
 
-      return (
-          <Doughnut
-              data={{
-                  labels,
-                  datasets: [{
-                      data, 
-                      backgroundColor: [
-                          '#F59332', '#478559', '#020202', '#4D4D4D', '#854673'
-                      ],
-                      hoverBackgroundColor: []
-                  }]
-              }}
-              width={400}
-              options={{
-                  maintainAspectRatio: true
-              }} />
-      );
+  renderChart = () => {
+    const labels = this.state.ballot.getChoices().map((choice, i) => `Choice #${i + 1}`)
+        , sum    = this.state.balances.reduce((sum, cur) => sum.plus(cur), new BigNumber(0));
+
+    let data = [];
+    for(let i = 0; i < this.state.balances.length; i++){
+      let percent;
+      if(sum.isZero()){
+          percent = 1 / labels.length;
+      } else {
+          percent = this.state.balances[i].dividedBy(sum).toNumber();
+      }
+      data.push(percent * 100);
+    }
+
+    return (
+      <div>
+        <Doughnut
+          data={{
+            labels,
+            datasets: [{
+              data, 
+              backgroundColor: [
+                  '#F59332', '#478559', '#020202', '#4D4D4D', '#854673'
+              ],
+              hoverBackgroundColor: []
+            }]
+          }}
+          width={400}
+          options={{
+              maintainAspectRatio: true
+          }} />
+        <Button onClick={this.handleSubmit}>Distribute These Vote Tokens</Button>
+      </div>
+    );
   }
   renderTable = () => {
     const ballot = this.state.ballot;
@@ -171,10 +178,7 @@ export default class FindVotingResults extends Component {
   render() {
     return (
       <div className='find-container'>
-        <Container>
-          <Breadcrumb crumb='Find Voting Results' />
-        </Container>
-        <section className='search-section text-center'>
+        <section style={{marginTop: 0}} className='search-section text-center'>
           <Container>
             <input onChange={this.handleChange} type='text' placeholder='Enter Token Id' />
             <button onClick={this.handleSearch}>SEARCH</button>
@@ -187,3 +191,13 @@ export default class FindVotingResults extends Component {
     )
   }
 }
+
+const Button = styled.button`
+  background: #25a5dc;
+  color: white;
+  padding: 12px 30px;
+  border-radius: 0;
+  font-weight: bold;
+  outline: none!important;
+  border: none;
+`;

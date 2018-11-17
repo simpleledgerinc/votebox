@@ -2,6 +2,9 @@ import React, { Component } from 'react';
 import styled from 'styled-components';
 import { Container } from 'reactstrap';
 import GetVoteList from './GetVoteList';
+import SelectElection from './SelectElection';
+import ConfigDistribution from './ConfigDistribution';
+import AirdropToken from './AirdropToken';
 import BreadCrumb from '../../layouts/BreadCrumb';
 import '../createVoteToken/directional-buttons.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -17,7 +20,9 @@ export class DistributeVoteToken extends Component {
 
     this.state = {
       step : STEP_GET_VOTE,
-      holders: []
+      holders: [],
+      voteId: null,
+      ballot: null
     }
   }
 
@@ -37,14 +42,20 @@ export class DistributeVoteToken extends Component {
     }
   }
 
+  handleSkip = () => {
+    this.setState({
+      step: STEP_DISTRIBUTION
+    })
+  }
+
   renderBody = () => {
     switch (this.state.step) {
       case STEP_SELECT_ELECTION:
-       return <GetVoteList />
+        return <SelectElection onSubmit={this.handleSelectElectionSubmit}/>
       case STEP_DISTRIBUTION:
-       return <GetVoteList />
+        return <ConfigDistribution onSubmit={this.handleConfigDistributionSubmit} tokenId={this.state.voteId} ballot={this.state.ballot} />
       case STEP_ARIDROP_TOKEN:
-       return <GetVoteList />
+        return <AirdropToken />
       default:
         return <GetVoteList onSubmit={this.handleGetVoteSubmit} />
     }
@@ -57,19 +68,37 @@ export class DistributeVoteToken extends Component {
     })
   }
 
+  handleSelectElectionSubmit = (voteId, ballot) => {
+    this.setState({
+      step: STEP_DISTRIBUTION,
+      voteId,
+      ballot
+    })
+  }
+
+  handleConfigDistributionSubmit = () => {
+    this.setState({
+      step: STEP_ARIDROP_TOKEN
+    })
+  }
+
   render() {
     return (
       <div>
         <Container>
           <BreadCrumb crumb='Distribute Vote Token' />
-          { this.state.step === STEP_GET_VOTE ? null :
-            <PrevButton onClick={this.handleGoBack}>
+          { this.state.step === STEP_GET_VOTE ?
+            <CButton onClick={this.handleSkip}>
+              Skip To Distribution&nbsp;
+              <FontAwesomeIcon icon='angle-double-right' />
+            </CButton> :
+            <CButton onClick={this.handleGoBack}>
               <FontAwesomeIcon icon='angle-double-left' />&nbsp;
               Previous
-            </PrevButton>
+            </CButton>
           }
         </Container>
-        <Container style={{minWidth: '610px', padding: '30px 0'}} className='text-center'>
+        <CContainer className='text-center step-header'>
           <Tab first active={this.state.step === STEP_GET_VOTE } className='btn btn-arrow-right '>
             <TabName>Get Voter List</TabName>
           </Tab>
@@ -82,7 +111,7 @@ export class DistributeVoteToken extends Component {
           <Tab last active={this.state.step === STEP_ARIDROP_TOKEN } className={'btn btn-arrow-right ' + (this.state.step === STEP_ARIDROP_TOKEN ? 'active' : '')}>
             <TabName>Airdrop Token</TabName>
           </Tab>
-        </Container>
+        </CContainer>
         { this.renderBody() }        
       </div>
     )
@@ -111,7 +140,7 @@ const Tab = styled.button`
   }
 `;
 
-const PrevButton = styled.button`
+const CButton = styled.button`
   float: right;
   background: #24a5dc;
   color: white;
@@ -127,4 +156,9 @@ const TabName = styled.span`
   margin-left: 30px;
   position: relative;
   z-index: 15;
+`;
+
+const CContainer = styled(Container)`
+  min-width: 610px;
+  padding: 30px 0 30px 10px!important;
 `;

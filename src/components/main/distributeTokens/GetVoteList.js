@@ -37,7 +37,6 @@ export class GetVoteList extends Component {
         voteAddr.push(addr);
       }
       const holders = await BitDB.getTokenBalances(id, voteAddr);
-      console.log('holders', holders);
       this.setState({
         fetching: false,
         holders,
@@ -45,8 +44,7 @@ export class GetVoteList extends Component {
     } catch(err){
       this.setState({
         fetching: false,
-        fetchError: err,
-        isLoaded: false
+        fetchError: err
       });
     }
   }
@@ -74,9 +72,9 @@ export class GetVoteList extends Component {
                 { tokenId }
               </td>
             </tr>
-            <tr>
+            <tr className='choice-column'>
               <Th>Distribution list (shares - address)</Th>
-              <td style={{padding: 0}}>
+              <td>
                 { holders.map((holder, index) => {
                   return (
                     <Span key={index}>
@@ -87,7 +85,8 @@ export class GetVoteList extends Component {
               </td>
             </tr>
           </tbody>
-        </Table>          
+        </Table>
+        <Button onClick={this.handleSubmit}>Distribute Vote Tokens to this List</Button>
       </Container>
     )
   }
@@ -127,7 +126,7 @@ export class GetVoteList extends Component {
             <button onClick={this.handleSearch}>SEARCH</button>
           </Container>
         </section>
-        <Container style={{padding: 0}} className='text-center'>
+        <Container style={{padding: 0, marginTop: '30px'}} className='text-center'>
           { this.renderBody() }
         </Container>
       </div>
@@ -139,7 +138,7 @@ export default GetVoteList
 
 const Th = styled.th`
   vertical-align: middle!important;
-  width: 20%;
+  width: 25%;
 `;
 
 const Span = styled.span`
@@ -147,8 +146,18 @@ const Span = styled.span`
   display: block;
   border: 1px solid lightgrey;
   border-width: 0 0 1px;
-  padding: 6px 12px;
+  padding: 12px 20px;
   :last-child {
     border: none;
   }
+`;
+
+const Button = styled.button`
+  background: #25a5dc;
+  color: white;
+  padding: 12px 30px;
+  border-radius: 0;
+  font-weight: bold;
+  outline: none!important;
+  border: none;
 `;

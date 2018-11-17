@@ -25,3 +25,38 @@ button {
 button:focus {
   outline: none!important;
 }
+
+table th, table td {
+  padding: 1.5rem!important;
+}
+
+table tr.choice-column td {
+  padding: 0!important;
+}
+
+@media(min-width: 576px) {
+  .step-header {
+    max-width: unset!important;
+  }
+  .container {
+    max-width: unset;
+  }
+}
+
+@media(min-width: 768px) {
+  .step-header {
+    max-width: 745px!important;
+  }
+}
+
+@media(min-width: 992px) {
+  .step-header {
+    max-width: 1010px!important;
+  }
+}
+
+@media(min-width: 1200px) {
+  .step-header {
+    max-width: 1210px!important;
+  }
+}

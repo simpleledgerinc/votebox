@@ -1,5 +1,7 @@
 .create-vote-token {
   min-width: 595px;
+  padding-left: 35px!important;
+  padding-right: 35px!important;
 }
 
 .create-vote-token .container {

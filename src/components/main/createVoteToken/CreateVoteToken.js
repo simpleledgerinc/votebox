@@ -70,17 +70,17 @@ export class CreateVoteToken extends Component {
             </button>
           }
         </Container>
-        <Container className='create-vote-token text-center'>
+        <Container className='create-vote-token text-center step-header'>
           <button className={'btn configure btn-arrow-right ' + (this.state.step === STEP_CONFIGURE ? 'active' : '')}>
-            <img width='25px' src={`/assets/img/configure${this.state.step === STEP_CONFIGURE ? '_active' : ''}.png`} />
+            <img alt='configure' width='25px' src={`/assets/img/configure${this.state.step === STEP_CONFIGURE ? '_active' : ''}.png`} />
             &nbsp;Configure
           </button>
           <button className={'btn pay btn-arrow-right ' + (this.state.step === STEP_PAY ? 'active' : '')}>
-            <img width='25px' src={`/assets/img/pay${this.state.step === STEP_PAY ? '_active' : ''}.png`} />
+            <img alt='pay' width='25px' src={`/assets/img/pay${this.state.step === STEP_PAY ? '_active' : ''}.png`} />
             &nbsp;Pay
           </button>
           <button className={'btn publish btn-arrow-right ' + (this.state.step === STEP_PUBLISH ? 'active' : '')}>
-            <img width='25px' src={`/assets/img/publish${this.state.step === STEP_PUBLISH ? '_active' : ''}.png`} />
+            <img alt='publish' width='25px' src={`/assets/img/publish${this.state.step === STEP_PUBLISH ? '_active' : ''}.png`} />
             &nbsp;Publish  
           </button>
         </Container>

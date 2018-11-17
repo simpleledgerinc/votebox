@@ -1,0 +1,48 @@
+.table-container {
+  display: block!important;
+  margin-left: 0!important;
+  margin-top: 20px;
+}
+
+.newRow {
+  padding: 0!important;
+  display: flex;
+}
+
+.newRow .ui.input {
+  width: 100%;
+  margin-right: 50px;
+}
+
+.newRow .ui.input input {
+  border-radius: 0;
+}
+
+.newRow Button {
+  min-width: 100px;
+}
+
+.csv-reader {
+  display: inline;
+}
+
+.ReactTable .rt-th, .ReactTable .rt-td {
+  padding: 10px 15px!important;
+}
+
+.ReactTable .rt-td:last-child {
+  padding: 9px 10px!important;
+}
+
+.ReactTable .rt-th:first-child, .ReactTable .rt-td:first-child {
+  min-width: 450px;
+}
+
+.ReactTable .rt-th:last-child, .ReactTable .rt-td:last-child {
+  width: 36px!important;
+  max-width: 36px!important;
+}
+
+.ReactTable .-pagination .-pageInfo {
+  display: none;
+}

@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { Collapse, Navbar, NavbarToggler, NavbarBrand, Nav, NavItem } from 'reactstrap';
 import { Link, withRouter } from 'react-router-dom';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import '../../../App.css';
 import './NavMenu.css'
 import styled from 'styled-components';
@@ -74,7 +73,7 @@ class NavMenu extends Component {
                 return (
                   <NavItem key={index} active={ activeIndex === index }>
                     <Link to={item.to}>
-                      <img style={{width: '19px', marginBottom: '10px'}}
+                      <img alt='navmenu' style={{width: '19px', marginBottom: '10px'}}
                         src={`/assets/img/${item.icon}${activeIndex === index ? '_active' : ''}.png`}
                       />
                       { item.name }
