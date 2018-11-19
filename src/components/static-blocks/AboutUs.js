@@ -6,7 +6,7 @@ import BreadCrumb from '../layouts/BreadCrumb';
 const AboutUs = () => {
   return (
     <div>
-      <img src='assets/img/about-banner.png' />
+      <img alt='banner' src='assets/img/about-banner.png' />
       <CContainer>
         <BreadCrumb crumb='About Vote'/>
         <h1>ABOUT US</h1>

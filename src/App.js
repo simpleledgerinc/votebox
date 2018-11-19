@@ -9,6 +9,7 @@ import { CastMyVotes } from './components/main/castMyVotes/CastMyVotes';
 import FindVotingResults from './components/main/findVotingResults/FindVotingResults';
 import { DistributeVoteToken } from './components/main/distributeTokens/DistributeVoteToken';
 import AboutUs from './components/static-blocks/AboutUs';
+import ContactUs from './components/static-blocks/ContactUs';
 
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faHome, faLongArrowAltLeft, faAngleDoubleLeft, faAngleDoubleRight } from '@fortawesome/free-solid-svg-icons';
@@ -29,6 +30,7 @@ class App extends Component {
                 <Route path='/find-vote' component={ FindVotingResults } />
                 <Route path='/distribute' component={ DistributeVoteToken } />
                 <Route path='/about' component={ AboutUs } />
+                <Route path='/contact' component={ ContactUs } />
               </Switch>
             </div>
             <Footer />
