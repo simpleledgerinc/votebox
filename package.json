@@ -6,7 +6,6 @@
     "@fortawesome/fontawesome-svg-core": "^1.2.8",
     "@fortawesome/free-solid-svg-icons": "^5.5.0",
     "@fortawesome/react-fontawesome": "^0.1.3",
-    "@moneybutton/react-money-button": "^0.1.3",
     "bchaddrjs-slp": "^0.2.5",
     "bignumber.js": "^8.0.1",
     "bitbox-sdk": "^2.2.0",

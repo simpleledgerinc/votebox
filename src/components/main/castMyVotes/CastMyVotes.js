@@ -3,7 +3,6 @@ import { Container, Table, Alert } from 'reactstrap';
 import { ClipLoader } from 'react-spinners';
 import './CastMyVotes.css';
 import Ballot from '../../../lib/Ballot';
-import BadgerWallet from '../../../lib/BadgerWallet';
 import Breadcrumb from '../../layouts/BreadCrumb';
 
 export class CastMyVotes extends Component {
