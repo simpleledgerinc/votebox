@@ -1,4 +1,5 @@
 import { Buffer } from 'buffer';
+import Ballot from './Ballot';
 
 export default class DocumentStore {
     static getDocument(hash){
@@ -26,5 +27,17 @@ export default class DocumentStore {
             }
         }
         return out;
+    }
+
+    static linkLocalDocument(ballot){
+        const hash = ballot.getExternalDocument()
+        if(!hash)
+            return ballot;
+
+        const data = DocumentStore.getDocument(hash);
+        const newBallot = Ballot.fromBuffer(data);
+        newBallot.setQuantity(ballot.getQuantity());
+
+        return newBallot;
     }
 }

@@ -21,6 +21,10 @@ import MenuItem from './MenuItem';
 import './App.css';
 import logo from '../images/votebox-logo.png';
 
+import BrowserWallet from '../lib/BrowserWallet';
+
+BrowserWallet.findTokenUTXO().then(console.log).catch(console.error);
+
 class App extends Component {
     render() {
         return (

@@ -7,7 +7,7 @@ import {
 } from 'semantic-ui-react';
 import bitdb from '../lib/BitDB';
 import setState from '../util/asyncSetState';
-import DocumentStorage from '../lib/DocumentStore';
+import DocumentStore from '../lib/DocumentStore';
 import Ballot from '../lib/Ballot';
 
 export default class BallotItem extends Component {
@@ -33,10 +33,16 @@ export default class BallotItem extends Component {
         });
 
         try {
-            const ballot = await bitdb.getBallot(this.props.tx.tx.h);
+            let ballot = await bitdb.getBallot(this.props.tx.tx.h);
+    
+            if(!ballot){
+                throw new Error('Ballot not found!');
+            }
+
+            ballot = DocumentStore.linkLocalDocument(ballot);
 
             await setState(this, {
-                ballot: this.linkLocalDocument(ballot),
+                ballot: DocumentStore.linkLocalDocument(ballot),
                 fetching: false
             });
         } catch(err){
@@ -46,20 +52,6 @@ export default class BallotItem extends Component {
             });
         }
     };
-
-    linkLocalDocument(ballot = null){
-        ballot = ballot || this.state.ballot;
-
-        const hash = ballot.getExternalDocument()
-        if(!hash)
-            return ballot;
-
-        const data = DocumentStorage.getDocument(hash);
-        const newBallot = Ballot.fromBuffer(data);
-        newBallot.setQuantity(this.state.ballot.getQuantity());
-
-        return newBallot();
-    }
 
     render(){
         const ballot     = this.state.ballot

@@ -44,7 +44,7 @@ class BitDB {
 
     async getBallot(tokenId){
         const res = await this._query({
-            v: 2,
+            v: 3,
             e: {
                 'out.b7': 'hex',
                 'out.b10': 'hex'
@@ -56,11 +56,11 @@ class BitDB {
             }
         });
 
-        if(res.unconfirmed.length < 1 && res.confirmed.length < 1){
+        if(res.u.length < 1 && res.c.length < 1){
             return null;
         }
 
-        const tx = res.confirmed[0] || res.unconfirmed[0];
+        const tx = res.c[0] || res.u[0];
 
         if(!tx){
             return null;
@@ -88,7 +88,7 @@ class BitDB {
 
     async getBallotList(offset = 0, limit = 20) {
         const response = await this._query({
-            v: 2,
+            v: 3,
             e: {
                 'out.b10': 'hex'
             },
@@ -101,12 +101,12 @@ class BitDB {
                 limit
             }
         });
-        return [].concat(response.confirmed).concat(response.unconfirmed);
+        return [].concat(response.c).concat(response.u);
     }
 
     async _readBitcoinFileMetadata(txId) {
         const res = await this._query({
-            v: 2,
+            v: 3,
             e: {
                 'out.b2': 'hex',
                 'out.b3': 'hex',
@@ -137,11 +137,11 @@ class BitDB {
             }
         });
 
-        if(res.unconfirmed.length < 1 && res.confirmed.length < 1){
+        if(res.u.length < 1 && res.c.length < 1){
             return null;
         }
 
-        const tx = res.confirmed[0] || res.unconfirmed[0];
+        const tx = res.c[0] || res.u[0];
         
         if(tx.out[0].s1 !== 'BFP\x00'){
             throw new Error('Wrong lokad id');
@@ -163,7 +163,7 @@ class BitDB {
 
     async _readBitcoinFileChunk(txId){
         const res = await this._query({
-            v: 2,
+            v: 3,
             e: {
                 'out.b1': 'hex'
             },
@@ -180,11 +180,11 @@ class BitDB {
             }
         });
 
-        if(res.unconfirmed.length < 1 && res.confirmed.length < 1){
+        if(res.u.length < 1 && res.c.length < 1){
             return null;
         }
 
-        const tx = res.confirmed[0] || res.unconfirmed[0];
+        const tx = res.c[0] || res.u[0];
 
         return {
             prevChunk: tx.in[0].e.h,

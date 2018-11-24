@@ -41,9 +41,6 @@ export const deriveRedeemScript = function (choice, end) {
 
     let script = BITBOX.Script.encode(redeemScript);
 
-    console.log(redeemScript);
-    console.log(script);
-
     return script;
 }
 

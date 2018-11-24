@@ -2,21 +2,19 @@ import React, { Component } from 'react'
 import ReactTable from 'react-table'
 import 'react-table/react-table.css'
 import BitDB from '../lib/BitDB'
+import BigNumber from 'bignumber.js';
 import { Button, Icon, Input } from 'semantic-ui-react'
 import PropDataUpdatedCSVLink from './PropDataUpdatedCSVLink'
 import CSVReader from 'react-csv-reader'
 import './DistributeListTable.css'
 
 class DistributionListTable extends Component {
-    constructor() {
-        super()
-        this.state = {
-            holders: [],
-            voteTokenQuantity: 0,
-            addNew: false,
-            newVoteAddress: '',
-            showCSVReader: false
-        }
+    state = {
+        holders: [],
+        voteTokenQuantity: 0,
+        addNew: false,
+        newVoteAddress: '',
+        showCSVReader: false
     }
 
     componentDidMount() {
@@ -99,14 +97,14 @@ class DistributionListTable extends Component {
                 contentEditable
                 suppressContentEditableWarning
                 onBlur={e => {
-                const data = [...this.state.holders];
-                data[cellInfo.index][cellInfo.column.id] = e.target.innerHTML;
+                    const data = [...this.state.holders];
+                    data[cellInfo.index][cellInfo.column.id] = e.target.innerHTML;
                     this.setState({ data })
-                    let amount = 0
+                    let amount = new BigNumber(0)
                     data.map(item => {
-                        amount += parseInt(item.amount)
+                        amount.plus(new BigNumber(item.amount))
                     })
-                    if (amount > parseInt(this.state.voteTokenQuantity)) {
+                    if (amount > new BigNumber(this.state.voteTokenQuantity)) {
                         this.props.handleTableErrorSubmit(true)
                     } else {
                         this.props.handleTableErrorSubmit(false)
@@ -195,7 +193,7 @@ class DistributionListTable extends Component {
                         Load Voter List
                     </Button>
                     {this.renderCSVReader()}
-                    <Button onClick={() => {this.props.onSubmit()}} disabled={this.state.tableError} style={{float: 'right'}} color='green'>Proceed to Airdrop</Button>
+                    <Button onClick={() => {this.props.onSubmit(this.state.holders)}} disabled={this.state.tableError} style={{float: 'right'}} color='green'>Proceed to Airdrop</Button>
                 </div>
             </div>
         )

@@ -1580,6 +1580,11 @@ bignumber.js@^7.2.1:
   resolved "https://registry.yarnpkg.com/bignumber.js/-/bignumber.js-7.2.1.tgz#80c048759d826800807c4bfd521e50edbba57a5f"
   integrity sha512-S4XzBk5sMB+Rcb/LNcpzXr57VRTxgAvaAEDAl1AwRx27j00hT84O6OkteE7u8UB3NuaaygCRrEpqox4uDOrbdQ==
 
+bignumber.js@^8.0.1:
+  version "8.0.1"
+  resolved "https://registry.yarnpkg.com/bignumber.js/-/bignumber.js-8.0.1.tgz#5d419191370fb558c64e3e5f70d68e5947138832"
+  integrity sha512-zAySveTJXkgLYCBi0b14xzfnOs+f3G6x36I8w2a1+PFQpWk/dp0mI0F+ZZK2bu+3ELewDcSyP+Cfq++NcHX7sg==
+
 binary-extensions@^1.0.0:
   version "1.12.0"
   resolved "https://registry.yarnpkg.com/binary-extensions/-/binary-extensions-1.12.0.tgz#c2d780f53d45bba8317a8902d4ceeaf3a6385b14"
@@ -1590,7 +1595,7 @@ bindings@^1.2.1:
   resolved "https://registry.yarnpkg.com/bindings/-/bindings-1.3.0.tgz#b346f6ecf6a95f5a815c5839fc7cdb22502f1ed7"
   integrity sha512-DpLh5EzMR2kzvX1KIlVC0VkC3iZtHKTgdtZ0a3pglBZdaQFjt5S9g9xd1lE+YvXyfd6mtCeRnrUfOLYiTMlNSw==
 
-bip21@Bitcoin-com/bip21, "bip21@github:Bitcoin-com/bip21":
+bip21@Bitcoin-com/bip21:
   version "2.0.1"
   resolved "https://codeload.github.com/Bitcoin-com/bip21/tar.gz/28f8d03a3a16ed11eb5b963248ed1be8c46c6d6f"
   dependencies:
@@ -1606,7 +1611,7 @@ bip32-utils@Bitcoin-com/bip32-utils#0.12.2:
     standard "^11.0.1"
     tape "*"
 
-"bip32-utils@github:Bitcoin-com/bip32-utils#0.13.0":
+bip32-utils@Bitcoin-com/bip32-utils#0.13.0:
   version "0.13.0"
   resolved "https://codeload.github.com/Bitcoin-com/bip32-utils/tar.gz/966fb8f0e0d4c667e4ee89adfa20c2078d66887c"
   dependencies:
@@ -1646,7 +1651,7 @@ bip66@^1.1.0, bip66@^1.1.3, bip66@^1.1.5:
   dependencies:
     safe-buffer "^5.0.1"
 
-bip68@Bitcoin-com/bip68#1.0.5, "bip68@github:Bitcoin-com/bip68#1.0.5":
+bip68@Bitcoin-com/bip68#1.0.5:
   version "1.0.5"
   resolved "https://codeload.github.com/Bitcoin-com/bip68/tar.gz/aeac5a8c5c1e01dfba79ff3eb824171be004a28c"
 
@@ -1859,7 +1864,7 @@ bitcoin-ops@Bitcoin-com/bitcoincash-ops, bitcoin-ops@^1.3.0:
   version "1.4.1"
   resolved "https://codeload.github.com/Bitcoin-com/bitcoincash-ops/tar.gz/d62a0a12ce227a63222282b5f4e9a7a23a5a6b38"
 
-"bitcoin-ops@github:Bitcoin-com/bitcoincash-ops", "bitcoin-ops@github:Bitcoin-com/bitcoincash-ops#1.5.0":
+bitcoin-ops@Bitcoin-com/bitcoincash-ops#1.5.0:
   version "1.5.0"
   resolved "https://codeload.github.com/Bitcoin-com/bitcoincash-ops/tar.gz/f1363d462fd044f35f94a220bf9568e25d985646"
 
@@ -1870,7 +1875,7 @@ bitcoin-txdecoder@0.0.3:
   dependencies:
     bitcoinjs-lib "3.3.*"
 
-bitcoincashjs-lib@Bitcoin-com/bitcoincashjs-lib#3.3.4, "bitcoincashjs-lib@github:Bitcoin-com/bitcoincashjs-lib#3.3.4":
+bitcoincashjs-lib@Bitcoin-com/bitcoincashjs-lib#3.3.4:
   version "3.3.4"
   resolved "https://codeload.github.com/Bitcoin-com/bitcoincashjs-lib/tar.gz/12fa5fe9b535816b54b9efedd6caf278d3e55b90"
   dependencies:
@@ -2699,7 +2704,7 @@ code-point-at@^1.0.0:
   resolved "https://registry.yarnpkg.com/code-point-at/-/code-point-at-1.1.0.tgz#0d070b4d043a5bea33a2f1a40e2edb3d9a4ccf77"
   integrity sha1-DQcLTQQ6W+ozovGkDi7bPZpMz3c=
 
-coininfo@Bitcoin-com/coininfo, "coininfo@github:Bitcoin-com/coininfo":
+coininfo@Bitcoin-com/coininfo:
   version "4.0.0"
   resolved "https://codeload.github.com/Bitcoin-com/coininfo/tar.gz/eece2c6141d08c3e7783929f2a1e1e681aa1a82c"
   dependencies:

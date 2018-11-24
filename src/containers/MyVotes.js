@@ -8,6 +8,7 @@ import {
 } from "react-router-dom";
 import BadgerWallet from '../lib/BadgerWallet';
 import './MyVotes.css';
+import BrowserWallet from '../lib/BrowserWallet';
 
 class MyVotes extends Component {
     state = {
@@ -30,6 +31,12 @@ class MyVotes extends Component {
         });
     };
 
+    handleBrowserFill = () => {
+        this.setState({
+            address: BrowserWallet.getSLPAddress()
+        });
+    };
+
     render() {
         return (
             <div>
@@ -39,6 +46,7 @@ class MyVotes extends Component {
                     value={this.state.address}
                     onChange={this.handleChange}/>
                 {BadgerWallet.hasInstalled() && <Button onClick={this.handleBadgerFill}>Fill with BadgerWallet address</Button>}
+                <Button onClick={this.handleBrowserFill}>Fill with deposit address</Button>
                 <Route path="/votes/:address" component={MyVotesBody} />
             </div>
         );

@@ -5,6 +5,7 @@ import { utils } from 'slpjs';
 import BigNumber from 'bignumber.js';
 import setState from '../util/asyncSetState';
 import { Doughnut } from 'react-chartjs-2';
+import DocumentStore from '../lib/DocumentStore';
 
 import {
     Route,
@@ -34,7 +35,13 @@ class AirdropVoterList extends Component {
         });
 
         try {
-            const ballot = await BitDB.getBallot(id);
+            let ballot = await BitDB.getBallot(id);
+
+            if(!ballot){
+                throw new Error('Ballot not found');
+            }
+
+            ballot = DocumentStore.linkLocalDocument(ballot);
 
             const voteAddr = [];
             for(let i = 0; i < ballot.getChoices().length; i++){

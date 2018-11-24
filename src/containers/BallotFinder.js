@@ -9,6 +9,7 @@ import {
     withRouter
 } from "react-router-dom";
 import Token from '../lib/Token';
+import DocumentStore from '../lib/DocumentStore';
 
 class BallotFinder extends Component {
     state = {
@@ -65,14 +66,22 @@ class BallotFinderBody extends Component {
         });
 
         try {
-            const ballot = await BitDB.getBallot(id);
+            let ballot = await BitDB.getBallot(id);
     
+            if(!ballot){
+                throw new Error('Ballot not found!');
+            }
+
+            ballot = DocumentStore.linkLocalDocument(ballot);
+
             const balances = [];
             for(let i = 0; i < ballot.getChoices().length; i++){
                 const addr = ballot.getAddress(i);
                 const balance = await Token.getBalance(id, addr);
                 balances.push(balance);
             }
+
+            
 
             await setState(this, {
                 fetching: false,

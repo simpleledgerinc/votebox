@@ -99,7 +99,7 @@ export default class AirdropPayWidget extends Component {
                     Edit Distribution List
                 </Header>
                 <br/>
-                <DistributionListTable onSubmit={() => {this.props.onSubmit()}} id={this.state.tokenId} voteTokenQuantity={ballot.getQuantity().toString(10)} handleTableErrorSubmit={this.handleTableError} />
+                <DistributionListTable onSubmit={this.props.onSubmit} id={this.state.tokenId} voteTokenQuantity={ballot.getQuantity().toString(10)} handleTableErrorSubmit={this.handleTableError} />
                 {this.renderErrorMessage()}
             </div>
         );
